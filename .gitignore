@@ -1,6 +1,6 @@
 *.pydevproject
 .metadata
-.metadata/*
+.metadata/
 .gradle
 bin/
 tmp/
