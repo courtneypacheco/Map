@@ -23,7 +23,8 @@ class MapData{
     private void loadFile() throws FileNotFoundException, IOException{
         
         //Initialize variables
-        String line, state, county, longitude, latitude;
+        String line, state, county;
+        double longitude, latitude;
         String[] data;
         String delimiter = "\t";
         
@@ -32,20 +33,20 @@ class MapData{
         BufferedReader BF = new BufferedReader(file);
         
         int line_number = 0;
-        int max_lines = 10;
         while ((line = BF.readLine()) != null){
-
-            data = line.split(delimiter);
-            
-            //Get state, county, longitude, and latitude
-            state = data[0];
-            county = data[1];
-            longitude = data[2];
-            latitude = data[3];
             
             //Add data to hashmap
             if (line_number > 0){
-                if (this.States == null || this.States.get(state) == null){
+                
+                data = line.split(delimiter);
+                
+                //Get state, county, longitude, and latitude
+                state = data[0];
+                county = data[1];
+                longitude = Double.parseDouble(data[2]);
+                latitude = Double.parseDouble(data[3]);
+                
+                if ((this.States == null || this.States.get(state) == null) && longitude != 0){
 
                     //This hash map "counties" will be stored in the "State" hashmap
                     HashMap Counties = new HashMap<String, ArrayList>();
@@ -98,6 +99,8 @@ class MapData{
         //Save to file
         saveFile();
         
+        System.out.println("HashMap created.");
+        
         /*
         //This prints out all the states. Leave this commented. Just for debugging purposes.
         for (Object key: this.States.keySet()) {
@@ -108,6 +111,7 @@ class MapData{
             }
         }
         */
+
     }
     
     private void saveFile() throws FileNotFoundException, IOException{
