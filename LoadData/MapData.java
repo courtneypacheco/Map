@@ -23,10 +23,14 @@ class MapData{
     private void loadFile() throws FileNotFoundException, IOException{
         
         //Initialize variables
-        String line, state, county;
-        double longitude, latitude;
+        String line, state, county; //for state & county info
+        double longitude, latitude; //the x and y coordinates to be checked
+        double x1, y1, x2, y2;      //coordinates for the current bounding rectangle
         String[] data;
         String delimiter = "\t";
+        
+        //Set coords to 0 by default (Initialize)
+        x1 = y1 = x2 = y2 = 0;
         
         //Read from file
         FileReader file = new FileReader(this.filename);
@@ -71,11 +75,10 @@ class MapData{
                         //Get the info for the existing state name
                         HashMap county_info = (HashMap)this.States.get(state);
 
-                        ArrayList coordinates = new ArrayList<Double>();
-                        coordinates.add(longitude);
-                        coordinates.add(latitude);
-
                         if (county_info.get(county) == null){
+                            ArrayList coordinates = new ArrayList<Double>();
+                            coordinates.add(longitude);
+                            coordinates.add(latitude);
                             county_info.put(county, coordinates);
                         }
                         else{
@@ -84,9 +87,74 @@ class MapData{
                             ArrayList existing_coordinates;
                             existing_coordinates = (ArrayList) county_info.get(county);
 
-                            //Append the new coordinates
-                            existing_coordinates.add(longitude);
-                            existing_coordinates.add(latitude);
+                            /* We need 2 pairs of coordinates to have a rectangle. If we only have
+                               1 pair, we will need to add another. */
+                            if (existing_coordinates.size() == 2){
+                                
+                                double tmp_x, tmp_y;
+                                
+                                //If x1 < longitude
+                                if ((double)existing_coordinates.get(0) < longitude){
+                                    existing_coordinates.add(longitude);
+                                }
+                                else{
+                                    tmp_x = (double)existing_coordinates.get(0);
+                                    tmp_y = (double)existing_coordinates.get(1);
+                                    
+                                    existing_coordinates.clear();
+                                    existing_coordinates.add(longitude);
+                                    existing_coordinates.add(tmp_y);
+                                    existing_coordinates.add(tmp_x);
+                                }
+                                
+                                //If y1 < longitude
+                                if ((double)existing_coordinates.get(1) > latitude){
+                                    existing_coordinates.add(latitude);
+                                }
+                                else{
+                                    tmp_y = (double)existing_coordinates.get(1);
+                                    tmp_x = (double)existing_coordinates.get(2);
+                                    
+                                    existing_coordinates.remove(1);
+                                    existing_coordinates.remove(1);
+                                    
+                                    existing_coordinates.add(latitude);
+                                    existing_coordinates.add(tmp_x);
+                                    existing_coordinates.add(tmp_y);
+                                }
+                                
+                                
+                                
+                            }
+                            
+                            /*Case where we already have a rectangle. Check longitude 
+                              & latitude to be added; then alter the bounding rectangle
+                              if necessary. */
+                            else{ 
+                                
+                                double tmp_x, tmp_y;
+                                
+                                //Existing bounding rectangle.
+                                x1 = (double)existing_coordinates.get(0);
+                                y1 = (double)existing_coordinates.get(1);
+                                x2 = (double)existing_coordinates.get(2);
+                                y2 = (double)existing_coordinates.get(3);
+                                
+                                if (longitude < x1){
+                                    existing_coordinates.set(0,longitude);
+                                }
+                                else if (longitude > x2){
+                                    existing_coordinates.set(2,longitude);
+                                }
+                                
+                                if (latitude < y1){
+                                    existing_coordinates.set(1,latitude);
+                                }
+                                else if (latitude > y2){
+                                    existing_coordinates.set(3,latitude);
+                                }
+                                
+                            }
 
                             //Update hashmap
                             county_info.put(county,existing_coordinates);
