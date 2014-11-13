@@ -35,7 +35,7 @@ class MapData{
         int line_number = 0;
         while ((line = BF.readLine()) != null){
             
-            //Add data to hashmap
+            //Add data to hashmap. The first line of the file contains no information... so only consider lines 2 -> end
             if (line_number > 0){
                 
                 data = line.split(delimiter);
@@ -46,51 +46,58 @@ class MapData{
                 longitude = Double.parseDouble(data[2]);
                 latitude = Double.parseDouble(data[3]);
                 
-                if ((this.States == null || this.States.get(state) == null) && longitude != 0){
+                //Make sure the longitude/latitude is NOT zero. Also, make sure that the county name is not "".
+                if (longitude != 0 && county != null && county.length()!=0){
+                    
+                    //Check if the current state has already been added to the hashmap
+                    if ((this.States == null || this.States.get(state) == null)){
 
-                    //This hash map "counties" will be stored in the "State" hashmap
-                    HashMap Counties = new HashMap<String, ArrayList>();
+                        //This hash map "counties" will be stored in the "State" hashmap
+                        HashMap Counties = new HashMap<String, ArrayList>();
 
-                    //This arraylist will contain the coordinates for said county
-                    ArrayList coordinates = new ArrayList<Double>();
-                    coordinates.add(longitude);
-                    coordinates.add(latitude);
+                        //This arraylist will contain the coordinates for said county
+                        ArrayList coordinates = new ArrayList<Double>();
+                        coordinates.add(longitude);
+                        coordinates.add(latitude);
 
-                    //Now add the county & arraylist to "Counties"
-                    Counties.put(county, coordinates);
+                        //Now add the county & arraylist to "Counties"
+                        Counties.put(county, coordinates);
 
-                    //Add Counties to "States" HashMap
-                    this.States.put(state, Counties);
-                }
-                else{
-
-                    //Get the info for the existing state name
-                    HashMap county_info = (HashMap)this.States.get(state);
-
-                    ArrayList coordinates = new ArrayList<Double>();
-                    coordinates.add(longitude);
-                    coordinates.add(latitude);
-
-                    if (county_info.get(county) == null){
-                        county_info.put(county, coordinates);
+                        //Add Counties to "States" HashMap
+                        this.States.put(state, Counties);
                     }
-                    else{
+                    else {
 
-                        //Get the existing coordinates from the hashmap
-                        ArrayList existing_coordinates;
-                        existing_coordinates = (ArrayList) county_info.get(county);
+                        //Get the info for the existing state name
+                        HashMap county_info = (HashMap)this.States.get(state);
 
-                        //Append the new coordinates
-                        existing_coordinates.add(longitude);
-                        existing_coordinates.add(latitude);
+                        ArrayList coordinates = new ArrayList<Double>();
+                        coordinates.add(longitude);
+                        coordinates.add(latitude);
 
-                        //Update hashmap
-                        county_info.put(county,existing_coordinates);
+                        if (county_info.get(county) == null){
+                            county_info.put(county, coordinates);
+                        }
+                        else{
+
+                            //Get the existing coordinates from the hashmap
+                            ArrayList existing_coordinates;
+                            existing_coordinates = (ArrayList) county_info.get(county);
+
+                            //Append the new coordinates
+                            existing_coordinates.add(longitude);
+                            existing_coordinates.add(latitude);
+
+                            //Update hashmap
+                            county_info.put(county,existing_coordinates);
+                        }
+
+                        //Update
+                        this.States.put(state, county_info);
                     }
-
-                    //Update
-                    this.States.put(state, county_info);
+                
                 }
+                
             }
             
             line_number++;
