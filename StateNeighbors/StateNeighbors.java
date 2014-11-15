@@ -41,7 +41,6 @@ public class StateNeighbors {
 		stateNeighbors.put("AZ", "NV");
 		stateNeighbors.put("AZ", "UT");
 		
-		
 		// CA California
 		stateNeighbors.put("CA", "AZ");
 		stateNeighbors.put("CA", "NV");
@@ -82,12 +81,12 @@ public class StateNeighbors {
 		stateNeighbors.put("HI", null);
 		
 		// IA Iowa
-		stateNeighbors.put("IA", "MN");
-		stateNeighbors.put("IA", "WI");
 		stateNeighbors.put("IA", "IL");
+		stateNeighbors.put("IA", "MN");
 		stateNeighbors.put("IA", "MO");
 		stateNeighbors.put("IA", "NE");
 		stateNeighbors.put("IA", "SD");
+		stateNeighbors.put("IA", "WI");
 		
 		// ID Idaho
 		stateNeighbors.put("ID", "MT");
@@ -111,7 +110,7 @@ public class StateNeighbors {
 		stateNeighbors.put("IN", "OH");
 		
 		// KS Kansas
-		stateNeighbors.put("KS", "AR");
+		//stateNeighbors.put("KS", "AR"); // Add?
 		stateNeighbors.put("KS", "CO");
 		//stateNeighbors.put("KS", "IA"); // Add?
 		stateNeighbors.put("KS", "OK");
@@ -119,8 +118,8 @@ public class StateNeighbors {
 		stateNeighbors.put("KS", "NE");
 		
 		// KY Kentucky
-		stateNeighbors.put("KY", "IN");
 		stateNeighbors.put("KY", "IL");
+		stateNeighbors.put("KY", "IN");
 		stateNeighbors.put("KY", "MO");
 		stateNeighbors.put("KY", "OH");
 		stateNeighbors.put("KY", "TN");
@@ -130,7 +129,7 @@ public class StateNeighbors {
 		// LA Louisiana
 		stateNeighbors.put("LA", "AR");
 		stateNeighbors.put("LA", "MS");
-		stateNeighbors.put("LA", "OK");
+		//stateNeighbors.put("LA", "OK"); // Add?
 		stateNeighbors.put("LA", "TX");
 		
 		// MA Massachusetts
@@ -184,6 +183,7 @@ public class StateNeighbors {
 		stateNeighbors.put("MT", "WY");
 		
 		// NC North Carolina
+		stateNeighbors.put("NC", "GA");
 		stateNeighbors.put("NC", "SC");
 		stateNeighbors.put("NC", "TN");
 		stateNeighbors.put("NC", "VA");
@@ -264,12 +264,11 @@ public class StateNeighbors {
 		// RI Rhode Island
 		stateNeighbors.put("RI", "CT");
 		stateNeighbors.put("RI", "MA");
-		stateNeighbors.put("RI", "NY");
 		
 		// SC South Carolina
 		stateNeighbors.put("SC", "GA");
 		stateNeighbors.put("SC", "NC");
-		stateNeighbors.put("SC", "TN");
+		//stateNeighbors.put("SC", "TN"); // Add?
 		
 		// South Dakota
 		stateNeighbors.put("SD", "IA");
@@ -341,12 +340,10 @@ public class StateNeighbors {
 		stateNeighbors.put("WY", "UT");
 		
 		// Print entries
-		int count = 0;
 		System.out.println("Displaying states and their neighbors...");
 		Set<String> keys = stateNeighbors.keySet();
 		for (String key: keys) {
 			System.out.println(key + ": " + stateNeighbors.get(key));
-			count += 1;
 			// Testing...
 			/*if (key.contains("MA")) {
 				System.out.println(countkey + ": " + stateNeighbors.get(key));
