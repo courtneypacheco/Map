@@ -1,4 +1,4 @@
-package loadmapdata;
+package LoadData;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,10 +13,10 @@ import java.util.HashMap;
 class MapData{
     
     protected static String filename;
-    protected HashMap States = new HashMap<String,HashMap<String,ArrayList>>();
+    protected HashMap<String, HashMap<String, ArrayList>> States = new HashMap<String,HashMap<String,ArrayList>>();
     
     MapData(String filename) throws IOException{
-        this.filename = filename;
+        MapData.filename = filename;
         loadFile();
     }
     
@@ -94,12 +94,12 @@ class MapData{
                                 double tmp_x, tmp_y;
                                 
                                 //If x1 < longitude
-                                if ((double)existing_coordinates.get(0) < longitude){
+                                if ((Double)existing_coordinates.get(0) < longitude){
                                     existing_coordinates.add(longitude);
                                 }
                                 else{
-                                    tmp_x = (double)existing_coordinates.get(0);
-                                    tmp_y = (double)existing_coordinates.get(1);
+                                    tmp_x = (Double)existing_coordinates.get(0);
+                                    tmp_y = (Double)existing_coordinates.get(1);
                                     
                                     existing_coordinates.clear();
                                     existing_coordinates.add(longitude);
@@ -108,12 +108,12 @@ class MapData{
                                 }
                                 
                                 //If y1 < longitude
-                                if ((double)existing_coordinates.get(1) > latitude){
+                                if ((Double)existing_coordinates.get(1) > latitude){
                                     existing_coordinates.add(latitude);
                                 }
                                 else{
-                                    tmp_y = (double)existing_coordinates.get(1);
-                                    tmp_x = (double)existing_coordinates.get(2);
+                                    tmp_y = (Double)existing_coordinates.get(1);
+                                    tmp_x = (Double)existing_coordinates.get(2);
                                     
                                     existing_coordinates.remove(1);
                                     existing_coordinates.remove(1);
@@ -135,10 +135,10 @@ class MapData{
                                 double tmp_x, tmp_y;
                                 
                                 //Existing bounding rectangle.
-                                x1 = (double)existing_coordinates.get(0);
-                                y1 = (double)existing_coordinates.get(1);
-                                x2 = (double)existing_coordinates.get(2);
-                                y2 = (double)existing_coordinates.get(3);
+                                x1 = (Double)existing_coordinates.get(0);
+                                y1 = (Double)existing_coordinates.get(1);
+                                x2 = (Double)existing_coordinates.get(2);
+                                y2 = (Double)existing_coordinates.get(3);
                                 
                                 if (longitude < x1){
                                     existing_coordinates.set(0,longitude);

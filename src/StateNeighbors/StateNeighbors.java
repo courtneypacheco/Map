@@ -11,7 +11,6 @@ import java.util.Set;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
-
 public class StateNeighbors {
 	public static void main(String[] args) {
 		Multimap<String, String> stateNeighbors = ArrayListMultimap.create();
