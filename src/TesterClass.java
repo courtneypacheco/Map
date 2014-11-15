@@ -1,4 +1,4 @@
-package Rectangle;
+
 
 public class TesterClass {
 	
