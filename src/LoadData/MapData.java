@@ -13,10 +13,10 @@ import java.util.HashMap;
 class MapData{
     
     protected static String filename;
-    protected HashMap States = new HashMap<String,HashMap<String,ArrayList>>();
+    protected HashMap<String, HashMap<String, ArrayList>> States = new HashMap<String,HashMap<String,ArrayList>>();
     
     MapData(String filename) throws IOException{
-        this.filename = filename;
+        MapData.filename = filename;
         loadFile();
     }
     
