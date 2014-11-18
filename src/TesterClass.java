@@ -1,9 +1,13 @@
+import RTree.RTreeNode;
+
 
 
 public class TesterClass {
 	
 	public static void main(String[] args) {
-		//Rectangle rect = new Rectangle();
+		RTreeNode RTreeRoot = new RTreeNode();
+		
+		
 	}
 
 }

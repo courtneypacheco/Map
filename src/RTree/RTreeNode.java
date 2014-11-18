@@ -1,6 +1,8 @@
 package RTree;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RTreeNode {
 	
@@ -11,9 +13,17 @@ public class RTreeNode {
 	private double _y2;
 	private double _width;
 	private double _height;
+	
+	//private HashMap Children = new HashMap<Object, Object>();
+	private ArrayList<RTreeNode> _Children;
 	//#endregion Private Variables --------------------------------
 	
 	//#region Properties ------------------------------------------
+	// List of children nodes
+	public ArrayList<RTreeNode> getChildren(){
+		return this._Children;
+	}
+	
 	// X1
 	public double getX1(){
 		return this._x1;
@@ -66,7 +76,7 @@ public class RTreeNode {
 	
 	//#region Methods ---------------------------------------------
 	/**
-	 * Constructor for the Rectangle class with no arguments
+	 * Constructor for the RTreeNode class with no arguments
 	 */
 	public RTreeNode(){
 		this._x1 = 0;
@@ -75,10 +85,11 @@ public class RTreeNode {
 		this._y1 = 0;
 		this._width = 0;
 		this._height = 0;
+		this._Children = new ArrayList<RTreeNode>();
 	}
 	
 	/**
-	 * Constructor for the Rectangle class.
+	 * Constructor for the RTreeNode class.
 	 * @param x1	The left boundary
 	 * @param x2	The right boundary
 	 * @param y1	The upper boundary
@@ -109,11 +120,45 @@ public class RTreeNode {
 		}
 		// Compute height
 		this._height = this._y2 - this._y1;
+		
+		// Initialize list of children nodes
+		this._Children = new ArrayList<RTreeNode>();
+	}
+	
+	/***
+	 * Add child node to this node
+	 * @param node	Child node that is to be added
+	 */
+	public void addChild(RTreeNode node){
+		this._Children.add(node);
+	}
+	
+	/***
+	 * Remove child node from this node
+	 * @param node	Child node that is to be removed
+	 */
+	public void removeChild(RTreeNode node){
+		this._Children.remove(node);
+	}
+	
+	/***
+	 * Remove child node from this node
+	 * @param node	Child node (integer index) that is to be removed
+	 */
+	public void removeChild(int node){
+		this._Children.remove(node);
+	}
+	
+	/***
+	 * Clears this node's list of children nodes
+	 */
+	public void clearChildren(){
+		this._Children.clear();
 	}
 	
 	/***
 	 * Tests if a rectangle intersects with this one
-	 * @param rect	Another rectangle to check with this one
+	 * @param node	Another rectangle to check with this one
 	 * @return		<code>true</code> if another rectangle intersects with this one
 	 */
 	public boolean intersects(RTreeNode node){
