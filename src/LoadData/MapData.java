@@ -60,7 +60,7 @@ class MapData{
                         HashMap Counties = new HashMap<String, ArrayList>();
 
                         //This arraylist will contain the coordinates for said county
-                        ArrayList coordinates = new ArrayList<Double>();
+                        ArrayList<Double> coordinates = new ArrayList<Double>();
                         coordinates.add(longitude);
                         coordinates.add(latitude);
 
