@@ -88,7 +88,7 @@ public class RTreeNode {
 	 * Constructor for the RTreeNode class with no arguments
 	 */
 	public RTreeNode(){
-		this._name = "None Assigned.";
+		this._name = "None";
 		this._x1 = 0;
 		this._x2 = 0;
 		this._y1 = 0;
@@ -146,6 +146,19 @@ public class RTreeNode {
 		this._Children.add(node);
 	}
 	
+	/**
+	 * Returns this node's child that matches a name
+	 * @param name	The name of child to be returned
+	 * @return		The RTreeNode of the child with matching name
+	 */
+	public RTreeNode getChildByName(String name){
+		for (int ii = 0; ii < this._Children.size(); ii++){
+			if (this._Children.get(ii).getName().equals(name))
+				return this._Children.get(ii);
+		}
+		return null;
+	}
+	
 	/***
 	 * Remove child node from this node
 	 * @param node	Child node that is to be removed
@@ -164,6 +177,23 @@ public class RTreeNode {
 		if (this._Children != null)
 			if (this._Children.size() > 0)
 				this._Children.remove(node);
+	}
+	
+	/**
+	 * Remove child node from this node if name matches
+	 * @param name	Name of child node to be removed
+	 */
+	public void removeChildByName(String name){
+		if (this._Children != null){
+			if (this._Children.size() > 0){
+				
+				for (int ii = 0; ii < this._Children.size(); ii++){
+					if (this._Children.get(ii).getName().equals(name))
+					this._Children.remove(ii);
+				}
+				
+			}
+		}
 	}
 	
 	/***
