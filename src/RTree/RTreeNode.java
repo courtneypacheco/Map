@@ -2,11 +2,12 @@ package RTree;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.HashMap;
+//import java.util.HashMap;
 
 public class RTreeNode {
 	
 	//#region Private Variables -----------------------------------
+	private String _name;
 	private double _x1;
 	private double _x2;
 	private double _y1;
@@ -22,6 +23,14 @@ public class RTreeNode {
 	// List of children nodes
 	public ArrayList<RTreeNode> getChildren(){
 		return this._Children;
+	}
+	
+	// Name
+	public String getName(){
+		return this._name;
+	}
+	public void setName(String name){
+		this._name = name;
 	}
 	
 	// X1
@@ -79,6 +88,7 @@ public class RTreeNode {
 	 * Constructor for the RTreeNode class with no arguments
 	 */
 	public RTreeNode(){
+		this._name = "None Assigned.";
 		this._x1 = 0;
 		this._x2 = 0;
 		this._y1 = 0;
@@ -95,7 +105,10 @@ public class RTreeNode {
 	 * @param y1	The upper boundary
 	 * @param y2	The lower boundary
 	 */
-	public RTreeNode(double x1, double x2, double y1, double y2){
+	public RTreeNode(String name, double x1, double x2, double y1, double y2){
+		
+		// Assign name
+		this._name = name;
 		
 		// Check if x1 > x2, flip if they are
 		if (x1 > x2){
@@ -138,7 +151,9 @@ public class RTreeNode {
 	 * @param node	Child node that is to be removed
 	 */
 	public void removeChild(RTreeNode node){
-		this._Children.remove(node);
+		if (this._Children != null)
+			if (this._Children.size() > 0)
+				this._Children.remove(node);
 	}
 	
 	/***
@@ -146,7 +161,9 @@ public class RTreeNode {
 	 * @param node	Child node (integer index) that is to be removed
 	 */
 	public void removeChild(int node){
-		this._Children.remove(node);
+		if (this._Children != null)
+			if (this._Children.size() > 0)
+				this._Children.remove(node);
 	}
 	
 	/***
