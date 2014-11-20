@@ -217,5 +217,41 @@ public class RTreeNode {
 		
 		return thisNode.intersects(inputNode);
 	}
+	
+	/***
+	 * Returns if node has any children
+	 * @return	<code>true</code> if node has at least one child
+	 */
+	public boolean hasChildren(){
+		if (this._Children == null)
+			return false;
+		return this._Children.size() > 0;
+	}
+	
+	/***
+	 * Returns number of children this node has
+	 * @return	Number of children this node has
+	 */
+	public int getNumberOfChildren(){
+		if (this._Children == null)
+			return 0;
+		return this._Children.size();
+	}
+	
+	/***
+	 * Expands this node's rectangular region
+	 * @param node	
+	 */
+	public void expandNode(RTreeNode node){
+		
+	}
+	
+	/***
+	 * Expands this node's rectangular region
+	 * @param node	
+	 */
+	public void expandNode(Rectangle node){
+		
+	}
 	//#endregion Methods ------------------------------------------
 }
