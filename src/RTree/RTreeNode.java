@@ -260,6 +260,16 @@ public class RTreeNode {
 		this.updateHeight();
 	}
 	
+	public void printStats(){
+		System.out.println("name = " + this._name);
+		System.out.println("x1 = " + this._x1);
+		System.out.println("x2 = " + this._x2);
+		System.out.println("y1 = " + this._y1);
+		System.out.println("y2 = " + this._y2);
+		System.out.println("width = " + this._width);
+		System.out.println("height = " + this._height);
+	}
+	
 	/***
 	 * Expands this node's rectangular region by adjusting its bounds, 
 	 * this is done in order to incorporate bounds of the second (input) node
