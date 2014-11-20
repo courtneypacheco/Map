@@ -255,6 +255,33 @@ public class RTreeNode {
 		return false;
 	}
 	
+	public ArrayList<RTreeNode> findNodesContainingPoint(double x, double y){
+		ArrayList<RTreeNode> allNodesContainingPoint = new ArrayList<RTreeNode>();
+		
+		// If this node node contains the point, add it to list
+		if (this.containsPoint(x, y))
+			allNodesContainingPoint.add(this);
+		else
+			return allNodesContainingPoint;
+		
+		// Add any of this node's children if they are contained
+		if (this._Children == null)
+			return allNodesContainingPoint;
+		
+		if (this._Children.size() == 0)
+			return allNodesContainingPoint;
+		
+		for (int ii = 0; ii < this._Children.size(); ii++){
+			allNodesContainingPoint.addAll(this._Children.get(ii).findNodesContainingPoint(x, y));
+			//if (this._Children.get(ii).containsPoint(x, y)){
+				//allNodesContainingPoint.add(this._Children.get(ii));
+				//allNodesContainingPoint.addAll(this._Children.get(ii).findNodesContainingPoint(x, y));
+				//this._Children.get(ii).findNodesContainingPoint(x, y);
+			//}
+		}
+		return allNodesContainingPoint;
+	}
+	
 	/***
 	 * Expands this node's rectangular region by adjusting its bounds, 
 	 * this is done in order to incorporate bounds of the second (input) node

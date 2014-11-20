@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import RTree.RTreeNode;
 
 public class TesterClass {
@@ -52,8 +54,24 @@ public class TesterClass {
 		Basic.expandRegion(Both);
 		Basic.printStats();
 		
+		// Test recursive find
 		Basic = new RTreeNode("Basic", 0, 10, 0, 10);	// Reset
+		
+		RTreeNode hello1 = new RTreeNode("hello1", 0, 7, 0, 7);
+		RTreeNode hello2 = new RTreeNode("hello2", 0, 11, 0, 11);
+		RTreeNode hellothere1 = new RTreeNode("hellothere1", -5, 7, 0, 7);
+		hello1.addChild(hellothere1);
+		
+		Basic.addChild(hello1);
+		Basic.addChild(hello2);
+		
 		System.out.println(Basic.containsPoint(1, 10));
+		System.out.println(hellothere1.containsPoint(1, 10));
+		
+		ArrayList<RTreeNode> nodesContainingPointTest = Basic.findNodesContainingPoint(4, 4);
+		for (int ii = 0; ii < nodesContainingPointTest.size(); ii++){
+			System.out.println(nodesContainingPointTest.get(ii).getName());
+		}
 	}
 
 }
