@@ -69,16 +69,10 @@ public class RTreeNode {
 	public double getWidth(){
 		return this._width;
 	}
-	public void setWidth(double width){
-		this._width = width;
-	}
 	
 	// Height
 	public double getHeight(){
 		return this._height;
-	}
-	public void setHeight(double height){
-		this._height = height;
 	}
 	
 	//#endregion Properties ---------------------------------------
@@ -120,7 +114,7 @@ public class RTreeNode {
 			this._x2 = x2;
 		}
 		// Compute width
-		this._width = this._x2 - this._x1;
+		this.updateWidth();
 		
 		// Check if y1 > y2, flip if they are
 		if (y1 > y2){
@@ -132,10 +126,18 @@ public class RTreeNode {
 			this._y2 = y2;
 		}
 		// Compute height
-		this._height = this._y2 - this._y1;
+		this.updateHeight();
 		
 		// Initialize list of children nodes
 		this._Children = new ArrayList<RTreeNode>();
+	}
+	
+	private void updateWidth(){
+		this._width = this._x2 - this._x1;
+	}
+	
+	private void updateHeight(){
+		this._height = this._y2 - this._y1;
 	}
 	
 	/***
@@ -200,7 +202,10 @@ public class RTreeNode {
 	 * Clears this node's list of children nodes
 	 */
 	public void clearChildren(){
-		this._Children.clear();
+		if (this._Children != null)
+			this._Children.clear();
+		else
+			this._Children = new ArrayList<RTreeNode>();
 	}
 	
 	/***
@@ -251,8 +256,8 @@ public class RTreeNode {
 		if (node._y2 > this._y2) this._y2 = node._y2;
 		
 		// Update width and height
-		this._width = this._x2 - this._x1;
-		this._height = this._y2 - this._y1;
+		this.updateWidth();
+		this.updateHeight();
 	}
 	
 	/***
@@ -260,12 +265,14 @@ public class RTreeNode {
 	 * this is done in order to incorporate bounds of the second (input) node
 	 * @param node	<code>Rectangle</code>
 	 */
+	/*
 	public void expandRegion(Rectangle node){
-		/*Rectangle thisNode = new Rectangle();
+		Rectangle thisNode = new Rectangle();
 		thisNode.setRect(_x1, _y1, _width, _height);
 		
 		Rectangle inputNode = new Rectangle();
-		inputNode.setRect(node.getX1(), node.getY1(), node.getWidth(), node.getHeight());*/
-	}
+		inputNode.setRect(node.getX1(), node.getY1(), node.getWidth(), node.getHeight());
+	}*/
+	
 	//#endregion Methods ------------------------------------------
 }
