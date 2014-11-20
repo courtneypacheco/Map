@@ -1,5 +1,7 @@
 package CommandLine;
 
+import Rectangle.RegionRectangle;
+
 /* Command-line Interface
  * To test on Eclipse:
  * 		Run ---> Run Configurations ---> In the Arguments tab, enter arguments
@@ -30,13 +32,24 @@ public class CommandLine {
 	public static void main(String[] args) {
 		int argsLen = args.length;
 		
-        if (argsLen < 3) {
+        if (argsLen != 3) {
         	errorCheck(1);
         } else {
-        	String x = args[0];
-        	String y = args[1];
-    		String k = args[2];
-    		System.out.printf("Searching the %s nearest counties from point (%s, %s)...\n", k, x, y);
+        	Double x = Double.parseDouble(args[0]);
+        	Double y = Double.parseDouble(args[1]);
+    		int k = Integer.parseInt(args[2]);
+
+    		/* If treating user-input coordinates as its own rectangle object
+			double x1 = Double.parseDouble(x);
+    		double x2 = Double.parseDouble(x);
+    		double y1 = Double.parseDouble(y);
+    		double y2 = Double.parseDouble(y);
+    		RegionRectangle myRectangle = new RegionRectangle(x1, x2, y1, y2);
+    		System.out.println(myRectangle.getHeight());
+    		System.out.println(myRectangle.getWidth());
+    		*/
+    		
+    		System.out.printf("Searching the %d nearest counties from point (%f, %f)...\n", k, x, y);
     		System.exit(0);
         }
     }
