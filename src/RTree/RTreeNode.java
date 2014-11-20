@@ -239,19 +239,33 @@ public class RTreeNode {
 	}
 	
 	/***
-	 * Expands this node's rectangular region
-	 * @param node	
+	 * Expands this node's rectangular region by adjusting its bounds, 
+	 * this is done in order to incorporate bounds of the second (input) node
+	 * @param node	<code>RTreeNode</code>Input node to incorporate
 	 */
-	public void expandNode(RTreeNode node){
+	public void expandRegion(RTreeNode node){
+		// Expand when necessary (one bound is farther out than the other)
+		if (node._x1 < this._x1) this._x1 = node._x1;
+		if (node._x2 > this._x2) this._x2 = node._x2;
+		if (node._y1 < this._y1) this._y1 = node._y1;
+		if (node._y2 > this._y2) this._y2 = node._y2;
 		
+		// Update width and height
+		this._width = this._x2 - this._x1;
+		this._height = this._y2 - this._y1;
 	}
 	
 	/***
-	 * Expands this node's rectangular region
-	 * @param node	
+	 * Expands this node's rectangular region by adjusting its bounds, 
+	 * this is done in order to incorporate bounds of the second (input) node
+	 * @param node	<code>Rectangle</code>
 	 */
-	public void expandNode(Rectangle node){
+	public void expandRegion(Rectangle node){
+		/*Rectangle thisNode = new Rectangle();
+		thisNode.setRect(_x1, _y1, _width, _height);
 		
+		Rectangle inputNode = new Rectangle();
+		inputNode.setRect(node.getX1(), node.getY1(), node.getWidth(), node.getHeight());*/
 	}
 	//#endregion Methods ------------------------------------------
 }
