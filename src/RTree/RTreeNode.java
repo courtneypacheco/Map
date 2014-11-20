@@ -249,7 +249,7 @@ public class RTreeNode {
 	 * @param y	Y-coordinate of point to check
 	 * @return	<code>true</code> if input point is contained in the <code>RTreeNode</code> region
 	 */
-	public boolean contains(double x, double y){
+	public boolean containsPoint(double x, double y){
 		if (x >= this._x1 && x <= this._x2 && y >= this._y1 && y <= this._y2)
 			return true;
 		return false;

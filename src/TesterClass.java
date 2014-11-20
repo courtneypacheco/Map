@@ -53,7 +53,7 @@ public class TesterClass {
 		Basic.printStats();
 		
 		Basic = new RTreeNode("Basic", 0, 10, 0, 10);	// Reset
-		System.out.println(Basic.contains(1, 10));
+		System.out.println(Basic.containsPoint(1, 10));
 	}
 
 }
