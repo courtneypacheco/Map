@@ -51,6 +51,9 @@ public class TesterClass {
 		Basic = new RTreeNode("Basic", 0, 10, 0, 10);	// Reset
 		Basic.expandRegion(Both);
 		Basic.printStats();
+		
+		Basic = new RTreeNode("Basic", 0, 10, 0, 10);	// Reset
+		System.out.println(Basic.contains(1, 10));
 	}
 
 }

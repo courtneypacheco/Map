@@ -243,6 +243,18 @@ public class RTreeNode {
 		return this._Children.size();
 	}
 	
+	/**
+	 * Returns if an input point is inside the <code>RTreeNode</code> region
+	 * @param x	X-coordinate of point to check
+	 * @param y	Y-coordinate of point to check
+	 * @return	<code>true</code> if input point is contained in the <code>RTreeNode</code> region
+	 */
+	public boolean contains(double x, double y){
+		if (x >= this._x1 && x <= this._x2 && y >= this._y1 && y <= this._y2)
+			return true;
+		return false;
+	}
+	
 	/***
 	 * Expands this node's rectangular region by adjusting its bounds, 
 	 * this is done in order to incorporate bounds of the second (input) node
@@ -260,6 +272,9 @@ public class RTreeNode {
 		this.updateHeight();
 	}
 	
+	/***
+	 * Prints the node's information such as name, bounding coordinates, width, height
+	 */
 	public void printStats(){
 		System.out.println("name = " + this._name);
 		System.out.println("x1 = " + this._x1);
