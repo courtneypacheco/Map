@@ -255,6 +255,13 @@ public class RTreeNode {
 		return false;
 	}
 	
+	/***
+	 * Recursively returns an array of <code>RTreeNode</code> 
+	 * that contains a given coordinate point from <code>this</code> root node
+	 * @param x	X-coordinate of point to be checked if contained in an RTree
+	 * @param y	Y-coordinate of point to be checked if contained in an RTree
+	 * @return	An ArrayList of <code>RTreeNode</code> that contains the input point
+	 */
 	public ArrayList<RTreeNode> findNodesContainingPoint(double x, double y){
 		
 		// Initiate array to store all nodes that contain given xy coordinates
