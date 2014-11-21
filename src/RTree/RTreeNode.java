@@ -256,8 +256,7 @@ public class RTreeNode {
 	}
 	
 	/***
-	 * Recursively returns an array of <code>RTreeNode</code> 
-	 * that contains a given coordinate point from <code>this</code> root node
+	 * Determines which nodes of an RTree contains a given point 
 	 * @param x	X-coordinate of point to be checked if contained in an RTree
 	 * @param y	Y-coordinate of point to be checked if contained in an RTree
 	 * @return	An ArrayList of <code>RTreeNode</code> that contains the input point
