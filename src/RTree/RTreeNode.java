@@ -256,28 +256,31 @@ public class RTreeNode {
 	}
 	
 	public ArrayList<RTreeNode> findNodesContainingPoint(double x, double y){
+		
+		// Initiate array to store all nodes that contain given xy coordinates
 		ArrayList<RTreeNode> allNodesContainingPoint = new ArrayList<RTreeNode>();
 		
 		// If this node node contains the point, add it to list
 		if (this.containsPoint(x, y))
 			allNodesContainingPoint.add(this);
-		else
-			return allNodesContainingPoint;
 		
-		// Add any of this node's children if they are contained
+		// Return if no children
 		if (this._Children == null)
 			return allNodesContainingPoint;
 		
+		// Return if no children
 		if (this._Children.size() == 0)
 			return allNodesContainingPoint;
 		
+		// Node has children, 
+		// check if point is contained in them and if they are, 
+		// then check their children (recursively)
 		for (int ii = 0; ii < this._Children.size(); ii++){
-			allNodesContainingPoint.addAll(this._Children.get(ii).findNodesContainingPoint(x, y));
-			//if (this._Children.get(ii).containsPoint(x, y)){
-				//allNodesContainingPoint.add(this._Children.get(ii));
-				//allNodesContainingPoint.addAll(this._Children.get(ii).findNodesContainingPoint(x, y));
-				//this._Children.get(ii).findNodesContainingPoint(x, y);
-			//}
+			if (this._Children.get(ii).containsPoint(x, y)){
+				
+				// Append children nodes' that contain the given point to the array
+				allNodesContainingPoint.addAll(this._Children.get(ii).findNodesContainingPoint(x, y));
+			}
 		}
 		return allNodesContainingPoint;
 	}
@@ -300,7 +303,7 @@ public class RTreeNode {
 	}
 	
 	/***
-	 * Prints the node's information such as name, bounding coordinates, width, height
+	 * Prints this node's information such as name, bounding coordinates, width, height
 	 */
 	public void printStats(){
 		System.out.println("name = " + this._name);

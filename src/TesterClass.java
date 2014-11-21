@@ -65,10 +65,15 @@ public class TesterClass {
 		Basic.addChild(hello1);
 		Basic.addChild(hello2);
 		
-		System.out.println(Basic.containsPoint(1, 10));
-		System.out.println(hellothere1.containsPoint(1, 10));
+		double x = 1;
+		double y = 10;
 		
-		ArrayList<RTreeNode> nodesContainingPointTest = Basic.findNodesContainingPoint(4, 4);
+		System.out.println("Basic contains point (" + x + ", " + y + ")?: " + Basic.containsPoint(x, y));
+		System.out.println("hello1 contains point (" + x + ", " + y + ")?: " + hello1.containsPoint(x, y));
+		System.out.println("hello2 contains point (" + x + ", " + y + ")?: " + hello2.containsPoint(x, y));
+		System.out.println("hellothere1 contains point (" + x + ", " + y + ")?: " + hellothere1.containsPoint(x, y));
+		
+		ArrayList<RTreeNode> nodesContainingPointTest = Basic.findNodesContainingPoint(x, y);
 		for (int ii = 0; ii < nodesContainingPointTest.size(); ii++){
 			System.out.println(nodesContainingPointTest.get(ii).getName());
 		}
