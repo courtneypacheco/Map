@@ -141,11 +141,12 @@ public class RTreeNode {
 	}
 	
 	/***
-	 * Add child node to this node
+	 * Add child node to this node, and expand this node's region size
 	 * @param node	Child node that is to be added
 	 */
 	public void addChild(RTreeNode node){
 		this._Children.add(node);
+		this.expandRegion(node);
 	}
 	
 	/**
