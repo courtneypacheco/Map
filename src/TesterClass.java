@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import LoadData.MapData;
 import RTree.RTreeNode;
+import StateNeighbors.StateNeighbors;
 
 
 public class TesterClass {
@@ -10,6 +11,9 @@ public class TesterClass {
 		
 		// Load map data
 		MapData mapData = LoadMapData("src\\NationalFile_StateProvinceDecimalLatLong.txt");
+		
+		// Load state neighbors
+		StateNeighbors stateNeighbors = LoadStateNeighborsList();
 		
 		// Test RTreeNode methods
 		TestRTreeNodeClass();
@@ -20,10 +24,17 @@ public class TesterClass {
 	 * @throws IOException
 	 */
 	public static MapData LoadMapData(String filename) throws IOException{
-		System.out.println("Loading map data...");
+		System.out.println("Loading Map Data...");
 		MapData mapData = new MapData(filename);
-		System.out.println("Loading map data completed...");
+		System.out.println("Loading Map Data completed...");
 		return mapData;
+	}
+	
+	public static StateNeighbors LoadStateNeighborsList() throws IOException{
+		System.out.println("Loading State Neighbors data...");
+		StateNeighbors stateNeighbors = new StateNeighbors();
+		System.out.println("Loading State Neighbors completed...");
+		return stateNeighbors;
 	}
 	
 	public static void TestRTreeNodeClass(){

@@ -12,8 +12,21 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
 public class StateNeighbors {
+	
+	public static Multimap<String, String> stateNeighbors;
+	
+	public StateNeighbors(){
+		stateNeighbors = ArrayListMultimap.create();
+		loadStateNeighbors();
+	}
+	
 	public static void main(String[] args) {
-		Multimap<String, String> stateNeighbors = ArrayListMultimap.create();
+		loadStateNeighbors();
+	}
+	
+	private static void loadStateNeighbors(){
+		
+		stateNeighbors = ArrayListMultimap.create();
 		
 		// Add all states and their neighbors to multimap "stateNeighbors"
 		// AK Alaska...no neighbors :*(
