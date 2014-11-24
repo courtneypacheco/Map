@@ -1,12 +1,34 @@
+import java.io.IOException;
 import java.util.ArrayList;
-
+import LoadData.MapData;
 import RTree.RTreeNode;
+
 
 public class TesterClass {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
+		// Load map data
+		MapData mapData = LoadMapData("src\\NationalFile_StateProvinceDecimalLatLong.txt");
+		
+		// Test RTreeNode methods
+		TestRTreeNodeClass();
+	}
+	
+	/***
+	 * Loads input map data for application
+	 * @throws IOException
+	 */
+	public static MapData LoadMapData(String filename) throws IOException{
+		System.out.println("Loading map data...");
+		MapData mapData = new MapData(filename);
+		System.out.println("Loading map data completed...");
+		return mapData;
+	}
+	
+	public static void TestRTreeNodeClass(){
 		// Test RTreeNodes class
+		System.out.println("----------------------------------");
 		RTreeNode UnitedStates = new RTreeNode("United States", 1, 25, 1, 25);
 		
 		RTreeNode MA = new RTreeNode("MA", 1, 10, 1, 10);
@@ -78,5 +100,4 @@ public class TesterClass {
 			System.out.println(nodesContainingPointTest.get(ii).getName());
 		}
 	}
-
 }

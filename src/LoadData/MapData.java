@@ -10,12 +10,12 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class MapData{
+public class MapData{
     
     protected static String filename;
     protected HashMap<String, HashMap<String, ArrayList>> States = new HashMap<String,HashMap<String,ArrayList>>();
     
-    MapData(String filename) throws IOException{
+    public MapData(String filename) throws IOException{
         MapData.filename = filename;
         loadFile();
     }
@@ -33,7 +33,7 @@ class MapData{
         x1 = y1 = x2 = y2 = 0;
         
         //Read from file
-        FileReader file = new FileReader(this.filename);
+        FileReader file = new FileReader(MapData.filename);
         BufferedReader BF = new BufferedReader(file);
         
         int line_number = 0;
