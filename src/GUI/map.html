@@ -1,0 +1,140 @@
+<!-- References: 
+          http://www.w3schools.com/googleAPI/default.asp
+          http://www.teamdev.com/downloads/jxbrowser/docs/JxBrowser-PGuide.html#loading
+          http://java.dzone.com/articles/google-maps-java-swing 
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      body {
+        position:relative; 
+        width:800px;
+        height:800px;
+        top:0px; 
+        left:0px;
+        margin-left:auto; 
+        margin-right:auto; 
+        background-color:white;
+      }
+
+      .divTop {
+        position:relative;
+        width:800px;
+        height:100px;
+        top:0px; 
+        left:0px;
+        margin-left:auto; 
+        margin-right:auto; 
+        background-color:white;
+      }
+
+      .divMiddle{
+        position:relative;
+        width:800px;
+        height:500px;
+        top:0px;
+        left:0px;
+        margin-left:auto;
+        margin-right:auto;
+      }
+
+      .divBottom{
+        position:relative;
+        width:800px;
+        height:50px;
+        top:0px;
+        left:0px;
+        margin-left:auto;
+        margin-right:auto;
+      }
+
+      h1 {
+        font-size: 3em;
+        font-weight: bold;
+        font-family: sans-serif;
+        margin-top: 0.1em;
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 0;
+      }
+
+      p {
+        font-size: 0.7em;
+        font-family: sans-serif;
+        margin-top: 0.1em;
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      </style>
+  </head>
+    <script
+      src="http://maps.googleapis.com/maps/api/js">
+    </script>
+
+    <script>
+      // declare map variable and array to store markers (in order to delete)
+      var map;
+      var markers = [];
+
+      // set map options and execute during load 
+      function initialize()
+      {
+        // initialize map options
+        var mapOptions = {
+          center: new google.maps.LatLng(39, -99), // starting coordinates
+          zoom: 3, // zoom option (to show AK and HI)
+          mapTypeId:google.maps.MapTypeId.ROADMAP // default map type
+          };
+
+          // create map object inside of the <div> element using the parameters declared in mapOptions
+          map = new google.maps.Map(document.getElementById("myMap"), mapOptions);
+
+          // add event listener that will execute the getCoordinates function when user clicks on the map
+          google.maps.event.addListener(map, 'click', function(event) { getCoordinates(event.latLng) });
+      }
+
+      // when user clicks on map, a marker will be placed and an infowindow will display the latitude and longitude coordinates 
+      function getCoordinates(location) {
+        var marker = new google.maps.Marker({  
+          position: location, 
+          map: map
+        });
+        markers.push(marker); // add to array to delete later
+
+        var infowindow = new google.maps.InfoWindow({ 
+          content: '<div id="content">' + '<h2 id="heading">Coordinates</h2>' + '<p><b>Latitude: </b>' + location.lat() + '<p><b>Longitude: </b> ' + location.lng() + '</div>' 
+        });
+        infowindow.open(map, marker);
+      }
+
+      // Delete markers from map when button is clicked on top panel
+      function deleteMarkers() {
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+        }
+        markers= [];
+      }
+
+      // on load, execute the initialize function
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+
+<!-- HTML ELEMENTS -->
+<body>
+  <div class="divTop" >
+    <h1>EC 504 Map Project</h1>
+    <input onclick="deleteMarkers();" type=button value="Delete Markers" style="position: relative; top:0px; left:1200px">
+  </div>
+
+  <div class="divMiddle" >
+    <div id="myMap" style="width:800px;height:500px"></div>
+  </div>
+
+  <div class="divBottom" >
+    <p align="center">Boston University EC 504 Fall 2014 Project | Copyright 2014 Minnie Kim, Courtney Pacheco, Amit Sinha, Jeannie Trinh<p>
+  </div>
+</body>
+</html>
