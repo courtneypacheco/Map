@@ -68,14 +68,13 @@ public class RTree implements Skeleton{
                 MBR = (ArrayList)Counties.get(county_name);
                 
                 if (MBR.size()>2){
-                    c = new RNode(county_name,(double)MBR.get(0),(double)MBR.get(1),(double)MBR.get(2),(double)MBR.get(3),3,size);
+                    c = new RNode(county_name,(double)MBR.get(0),(double)MBR.get(1),(double)MBR.get(2),(double)MBR.get(3),tree_height,size);
                 }
                 else{ //some counties only have 1 coordinate point, so this 'else' statement is meant to handle those counties
-                    c = new RNode(county_name,(double)MBR.get(0),(double)MBR.get(1),(double)MBR.get(0),(double)MBR.get(1),3,size);
+                    c = new RNode(county_name,(double)MBR.get(0),(double)MBR.get(1),(double)MBR.get(0),(double)MBR.get(1),tree_height,size);
                 }
                     
-                add(c,size,tree_height);
-
+                add(c,size,tree_height); //problem w/ adding...
             }
         }
         
@@ -287,6 +286,7 @@ public class RTree implements Skeleton{
 
     @Override
     public RNode chooseLeaf(RNode node, int level) {
+        
         
         //Get root node
         RNode N = getNode(this.root_id);
