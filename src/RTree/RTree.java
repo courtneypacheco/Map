@@ -74,7 +74,7 @@ public class RTree implements Skeleton{
                     c = new RNode(county_name,(double)MBR.get(0),(double)MBR.get(1),(double)MBR.get(0),(double)MBR.get(1),3,size);
                 }
                     
-                add(c,size,1);
+                add(c,size,tree_height);
 
             }
         }
@@ -82,8 +82,9 @@ public class RTree implements Skeleton{
     }
 
     @Override
-    public void add(RNode node, int node_id, int tree_level) {
-        RNode n = chooseLeaf(node,tree_level);
+    public void add(RNode node, int node_id, int level) {
+        
+        RNode n = chooseLeaf(node,level);
         RNode leaf = null;
         
         
@@ -285,25 +286,24 @@ public class RTree implements Skeleton{
 
 
     @Override
-    public RNode chooseLeaf(RNode node, int tree_level) {
+    public RNode chooseLeaf(RNode node, int level) {
         
+        //Get root node
+        RNode N = getNode(this.root_id);
         
         //Clear stacks
         parents.clear();
         parents_idx.clear();
-   
-        //Get root node
-        RNode N = getNode(this.root_id);
         
         //Check if 'node' is already a leaf:
         while (true){
-            if (node.tree_level == tree_level){
+            if (node.tree_level == level){
                 return node;
             }
-            
+
             //Choose subtree method: choose subtree where the MBR has to expand the least
             double smallest_expansion = N.calculateExpansion(node);
-            double tmp_expansion = Double.NEGATIVE_INFINITY;
+            double tmp_expansion = -1;
             
             //Index of the subtree node
             int SN_idx = 0;
@@ -314,6 +314,8 @@ public class RTree implements Skeleton{
                 //Note to self: possible errors here!
                 child_name = (String)child;
                 tmp_expansion = N.calculateExpansion(node.getChild(child_name));
+                
+                System.out.println(child_name);
                 
                 if (smallest_expansion > tmp_expansion){
                     smallest_expansion = tmp_expansion;
@@ -330,7 +332,8 @@ public class RTree implements Skeleton{
             parents.push(node.ID);
             parents_idx.push(SN_idx);
             
-            N = (RNode)N.children.get(child_name);
+            N = getNode(SN_idx);
+            //N = (RNode)N.children.get(child_name);
         }
         
         
@@ -338,7 +341,7 @@ public class RTree implements Skeleton{
 
     @Override
     public RNode getNode(int ID) {
-        return Node_IDs.get(ID);
+        return this.Node_IDs.get(ID);
     }
     
     private RNode fixTree(RNode n1, RNode n2){
