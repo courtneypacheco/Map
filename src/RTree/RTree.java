@@ -56,7 +56,8 @@ public class RTree implements Skeleton{
         
         //Iterate through all the states
         for (Object state: Data.keySet()){ 
-            Counties = (HashMap)Data.get((String)state);
+            String state_name = (String)state;
+            Counties = (HashMap)Data.get(state_name);
             
             //RNode temp = new RNode();
             
@@ -68,10 +69,10 @@ public class RTree implements Skeleton{
                 MBR = (ArrayList)Counties.get(county_name);
                 
                 if (MBR.size()>2){
-                    c = new RNode(county_name,(double)MBR.get(0),(double)MBR.get(1),(double)MBR.get(2),(double)MBR.get(3),this.tree_height,size);
+                    c = new RNode(state_name,county_name,(double)MBR.get(0),(double)MBR.get(1),(double)MBR.get(2),(double)MBR.get(3),this.tree_height,size);
                 }
                 else{ //some counties only have 1 coordinate point, so this 'else' statement is meant to handle those counties
-                    c = new RNode(county_name,(double)MBR.get(0),(double)MBR.get(1),(double)MBR.get(0),(double)MBR.get(1),this.tree_height,size);
+                    c = new RNode(state_name,county_name,(double)MBR.get(0),(double)MBR.get(1),(double)MBR.get(0),(double)MBR.get(1),this.tree_height,size);
                 }
                     
                 add(c,size,this.tree_height); //problem w/ adding...
@@ -358,13 +359,13 @@ public class RTree implements Skeleton{
             int idx = (int)parents_idx.pop();
             
             RNode node = getNode(idx);
-            RNode nodes_child = parent.getChild(node.name); //child of 'node'
+            RNode nodes_child = parent.getChild(node.County); //child of 'node'
             if ((nodes_child.max_x != n1.max_x) ||
                 (nodes_child.min_x != n1.min_x) ||
                 (nodes_child.min_y != n1.min_y) ||
                 (nodes_child.max_y != n1.max_y)){
                 
-                parent.getChild(node.name).updateMBR(n1.min_x, n1.min_y, n1.max_x, n1.max_y); //possible problem here
+                parent.getChild(node.County).updateMBR(n1.min_x, n1.min_y, n1.max_x, n1.max_y); //possible problem here
                 
             }
             
