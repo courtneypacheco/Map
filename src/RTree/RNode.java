@@ -15,8 +15,9 @@ public class RNode implements Rect{
     //x- and y-coordinates for the center
     protected double[] center = {0,0};
     
-    //Name of the state *or* county
-    protected String name;
+    //Name of the state & county
+    protected String State;
+    protected String County;
     
     //Pointer to parent
     //private RNode parent;
@@ -31,10 +32,11 @@ public class RNode implements Rect{
     protected int nChildren = 0;
     
     
-    RNode(String name, double x1, double y1, double x2, double y2, int level, int id){
+    RNode(String state, String county, double x1, double y1, double x2, double y2, int level, int id){
         
         //Set Name
-        this.name = name;
+        this.State = state;
+        this.County = county;
         
         //Initialize HashMap
         this.children = new HashMap<String, RNode>();
@@ -58,7 +60,8 @@ public class RNode implements Rect{
     
     //Alternative /Default constructor 
     RNode(int id, int tree_level){
-        this.name = null;
+        this.State = "[no state]";
+        this.County = "[no county]";
         this.children = new HashMap<String, RNode>();
         
         //Rectangle attributes
@@ -78,13 +81,21 @@ public class RNode implements Rect{
     }
 
     public void addChild(RNode child) {
-        if (children.containsKey(child.name)){
-            System.out.println(child.name + " has already been added!");
+        
+        
+        String state_county = child.County + ", " +child.State;
+        if (child.County == "[no county]"){
+            this.children.put(state_county,child);
+            this.nChildren++;
+            System.out.println("Splitting, then adding navigation node....");
+        }
+        else if (children.containsKey(state_county)){
+            System.out.println(state_county + " has already been added!");
         }
         else{
-            this.children.put(child.name,child);
+            this.children.put(state_county,child);
             this.nChildren++;
-            System.out.println("Added " + child.name);
+            System.out.println("Added " + state_county);
         }
     }
 
@@ -170,8 +181,12 @@ public class RNode implements Rect{
         this.max_y = y2;
     }
     
-    public void updateName(String new_name){
-        this.name = new_name;
+    public void updateCounty(String new_name){
+        this.County = new_name;
+    }
+    
+    public void updateState(String new_name){
+        this.State = new_name;
     }
     
 }
