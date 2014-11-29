@@ -25,7 +25,7 @@ public class RTree implements Skeleton{
     
 
     //Tree parameters
-    final protected int default_max_entries = 40; //max # of children
+    final protected int default_max_entries = 80; //max # of children
     final protected int default_min_entries = 1;  //min # of children
     
     
@@ -68,16 +68,19 @@ public class RTree implements Skeleton{
                 MBR = (ArrayList)Counties.get(county_name);
                 
                 if (MBR.size()>2){
-                    c = new RNode(county_name,(double)MBR.get(0),(double)MBR.get(1),(double)MBR.get(2),(double)MBR.get(3),tree_height,size);
+                    c = new RNode(county_name,(double)MBR.get(0),(double)MBR.get(1),(double)MBR.get(2),(double)MBR.get(3),this.tree_height,size);
                 }
                 else{ //some counties only have 1 coordinate point, so this 'else' statement is meant to handle those counties
-                    c = new RNode(county_name,(double)MBR.get(0),(double)MBR.get(1),(double)MBR.get(0),(double)MBR.get(1),tree_height,size);
+                    c = new RNode(county_name,(double)MBR.get(0),(double)MBR.get(1),(double)MBR.get(0),(double)MBR.get(1),this.tree_height,size);
                 }
                     
-                add(c,size,tree_height); //problem w/ adding...
+                add(c,size,this.tree_height); //problem w/ adding...
             }
         }
-        
+     
+        System.out.println("\nRTree completed.");
+        System.out.println("   -> Number of LEVELS in the tree: " + this.tree_height);
+        System.out.println("   -> Number of NODES in the tree: " + this.size);
     }
 
     @Override
@@ -94,7 +97,7 @@ public class RTree implements Skeleton{
         
         //If the number of children exceeds max #, then split the node
         else{
-            leaf = split(node,n,size);
+            leaf = split(n,node,size);
         }
         
         //Now fix the tree
@@ -126,7 +129,7 @@ public class RTree implements Skeleton{
     public RNode split(RNode node, RNode extra, int ID) { //linear split
         
         //When we split the node, we will store ~1/2 the values here
-        RNode new_node = null;
+        RNode new_node = new RNode(size,tree_height+1);
         Node_IDs.put(new_node.ID, new_node);
         
         //Now we want to find the best MBRs
@@ -159,9 +162,9 @@ public class RTree implements Skeleton{
         
         //Compare R1 & R2 to the new node
         RNode Seed1, Seed2;
-        
+
         //R1
-        temp_child = (RNode)node.children.get(R1);
+        temp_child = (RNode)node.children.get(R1); //<---- error
         longitude1 = temp_child.center[0];
         latitude1  = temp_child.center[0];
         
@@ -197,7 +200,7 @@ public class RTree implements Skeleton{
         
         
         //(2) Now add nodes, one by one, to each MBR based on which seed grows the least
-        RNode MBR1 = new RNode(tree_height,size);
+        RNode MBR1 = new RNode(tree_height,size++);
         RNode MBR2 = new RNode(tree_height,size++);
         
         MBR1.addChild(Seed1);
@@ -264,6 +267,7 @@ public class RTree implements Skeleton{
         new_node.addChild(MBR1);
         new_node.addChild(MBR2);
         
+        
         return new_node;
     }
     
@@ -297,8 +301,8 @@ public class RTree implements Skeleton{
         
         //Check if 'node' is already a leaf:
         while (true){
-            if (node.tree_level == level){
-                return node;
+            if (N.tree_level == level){
+                return N;
             }
 
             //Choose subtree method: choose subtree where the MBR has to expand the least
@@ -346,7 +350,10 @@ public class RTree implements Skeleton{
     
     private RNode fixTree(RNode n1, RNode n2){
        
-        while (n1.tree_level != tree_height){
+        //System.out.println("TREE HEIGHT: " + this.tree_height);
+        //System.out.println("N1 TREE HEIGHT: " + n1.tree_level);
+        
+        while (n1.tree_level != this.tree_height){
             RNode parent = (RNode)parents.pop();
             int idx = (int)parents_idx.pop();
             
@@ -371,7 +378,7 @@ public class RTree implements Skeleton{
 
                 //If the number of children exceeds max #, then split the node
                 else{
-                    new_node = split(node,n2,size);
+                    new_node = split(n2,node,size);
                 }
 
                 n1 = parent;
@@ -384,6 +391,11 @@ public class RTree implements Skeleton{
         }
         
        return n2;
+    }
+    
+    //Which county did you click?
+    public void whichCounty(){
+        
     }
     
 }
