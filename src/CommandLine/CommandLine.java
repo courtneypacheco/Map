@@ -37,20 +37,20 @@ public class CommandLine {
 	public static void main(String[] args) throws IOException {
 		int argsLen = args.length;
 		
-        if (argsLen != 3) {
-        	errorCheck(1);
-        } else {
-        	Double x = Double.parseDouble(args[0]);
-        	Double y = Double.parseDouble(args[1]);
-    		int k = Integer.parseInt(args[2]);
+        	if (argsLen != 3) {
+        		errorCheck(1);
+        	} else {
+        		Double x = Double.parseDouble(args[0]);
+        		Double y = Double.parseDouble(args[1]);
+    			int k = Integer.parseInt(args[2]);
 
-    		// Load map data
-    		MapData mapData_States = new MapData("src\\NationalFile_StateProvinceDecimalLatLong.txt");
+    			// Load map data
+    			MapData mapData_States = new MapData("src\\NationalFile_StateProvinceDecimalLatLong.txt");
     		
-    		// Try priority queue
-    		//pqDistances pq = new pqDistances(mapData_States.States, 100, "CO", -104.98, 39.7516667);
-    		pqDistances pq = new pqDistances(mapData_States.States, 100, "CO", y, x, k); // longitude (y), latitude (x)
-    		pq.printQueue(k);
-        }
+    			// Try priority queue
+    			//pqDistances pq = new pqDistances(mapData_States.States, 100, "CO", -104.98, 39.7516667);
+    			pqDistances pq = new pqDistances(mapData_States.States, 100, "CO", y, x, k); // longitude (y), latitude (x)
+    			pq.printQueue(k);
+        	}
 	}
 }
