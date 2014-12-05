@@ -1,5 +1,10 @@
 package CommandLine;
 
+import java.io.IOException;
+import java.util.HashMap;
+
+import LoadData.MapData;
+import RTree.pqDistances;
 import Rectangle.RegionRectangle;
 
 /* Command-line Interface
@@ -29,7 +34,7 @@ public class CommandLine {
 		}
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		int argsLen = args.length;
 		
         if (argsLen != 3) {
@@ -39,18 +44,13 @@ public class CommandLine {
         	Double y = Double.parseDouble(args[1]);
     		int k = Integer.parseInt(args[2]);
 
-    		/* If treating user-input coordinates as its own rectangle object
-			double x1 = Double.parseDouble(x);
-    		double x2 = Double.parseDouble(x);
-    		double y1 = Double.parseDouble(y);
-    		double y2 = Double.parseDouble(y);
-    		RegionRectangle myRectangle = new RegionRectangle(x1, x2, y1, y2);
-    		System.out.println(myRectangle.getHeight());
-    		System.out.println(myRectangle.getWidth());
-    		*/
+    		// Load map data
+    		MapData mapData_States = new MapData("src\\NationalFile_StateProvinceDecimalLatLong.txt");
     		
-    		System.out.printf("Searching the %d nearest counties from point (%f, %f)...\n", k, x, y);
-    		System.exit(0);
+    		// Try priority queue
+    		//pqDistances pq = new pqDistances(mapData_States.States, 100, "CO", -104.98, 39.7516667);
+    		pqDistances pq = new pqDistances(mapData_States.States, 100, "CO", y, x, k); // longitude (y), latitude (x)
+    		pq.printQueue(k);
         }
-    }
+	}
 }
