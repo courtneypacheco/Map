@@ -25,7 +25,7 @@ public class TesterClass {
 		//ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-104.98, 39.7516667);	// CO
 		//ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-99.948225, 46.939944);	// ND --> include but also end at WA
 		//ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-83.600569, 37.706635);	// KY --> bigger list, includes KY
-		ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-121.657211, 40.569105);	// CA --> bigger list, includes KY
+		ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-121.657211, 40.569105);	// CA --> bigger list, includes CA
 		for (int ii = 0; ii < nodesContainingPointTest.size(); ii++){
 			System.out.println(nodesContainingPointTest.get(ii).getName());
 		}
