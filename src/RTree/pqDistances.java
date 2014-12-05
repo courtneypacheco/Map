@@ -21,7 +21,7 @@ public class pqDistances
        @param longitude = origin point (y)
     */
     
-    public pqDistances(HashMap states, int size, String state, double latitude, double longitude){
+    public pqDistances(HashMap states, int size, String state, double latitude, double longitude, int k){
     	this.comparator = new pqComparator();
         this.queue = new PriorityQueue<Double>(size, this.comparator);
         this.distance_mapping = new HashMap<Double,String>();
@@ -91,7 +91,6 @@ public class pqDistances
     //Print top 'k' counties from the queue
     public void printQueue(int k){
          //PriorityQueue<Double> temp_queue = new PriorityQueue<Double>(size, comparator);
-
          double d;
          String county_name;
          int counter = 0;
@@ -101,7 +100,7 @@ public class pqDistances
               //Now find the distance 'd' in the hashmap to figure out which county 'distance' corresponds to
               county_name = (String)distance_mapping.get(d);
 
-              System.out.println("County: " + county_name + "; distance: " + d);
+              System.out.println("County: " + county_name + "; distance: " + String.format("%.3g", d) + " km");
               counter++;
          }
     }
