@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 /**
  * Modified R-Tree node, specifically designed for the purpose of structuring regions of interest: State, Counties, etc.
- * @author Jeannie
+ * @author Jeannie Trinh
  *
  */
 public class RTreeNode {
@@ -79,7 +79,6 @@ public class RTreeNode {
 	public double getHeight(){
 		return this._height;
 	}
-	
 	//#endregion Properties ---------------------------------------
 	
 	//#region Methods ---------------------------------------------

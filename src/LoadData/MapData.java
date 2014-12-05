@@ -20,7 +20,7 @@ public class MapData{
         loadFile();
     }
     
-    public HashMap<String, HashMap<String, ArrayList>> getStates(){
+    public HashMap getStates(){
     	return States;
     }
     

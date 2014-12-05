@@ -14,26 +14,53 @@ public class TesterClass {
 		// Load map data
 		HashMap mapData_States = LoadMapData("src\\NationalFile_StateProvinceDecimalLatLong.txt");
 		
-        //This prints out all the states. Just for debugging purposes.
-        for (Object current_state : mapData_States.keySet()) {									// Iterate through all states
-            System.out.println(current_state);													// Prints out state
-            
-            HashMap state_value = (HashMap) mapData_States.get(current_state);							// Get internal state hashmap
-            
-            for (Object current_county : state_value.keySet()){									// Iterate through all counties in state
-            	
-                System.out.print("   - " + current_county);										// Prints out county belonging to [this] state
-                ArrayList county_dimensions = (ArrayList) state_value.get(current_county);		// Get county's list of rectangular dimensions
-                System.out.print(" " + county_dimensions + "\n");								// Print out county's dimensions
-            }
-        }
-        
+		//TEST
+		//testcode(mapData_States);
+		
+		// Create RTree
+		RTreeNode Root = CreateRTree(mapData_States);
+		
+		Root.printStats();
 		
 		// Load state neighbors
 		//StateNeighbors stateNeighbors = LoadStateNeighborsList();
 		
 		// Test RTreeNode methods
 		//TestRTreeNodeClass();
+	}
+	
+	public static void testcode(HashMap mapData){
+		//This prints out all the states. Just for debugging purposes.
+        for (Object current_state : mapData.keySet()) {											// Iterate through all states
+        	
+        	// IMPORTANT: Uncomment when selecting to print out a specific state (for testing purposes only)
+        	if (!current_state.toString().equals("MH")) continue;
+        	
+        	RTreeNode stateNode = new RTreeNode();												// Initialize current state's nodes
+            System.out.println(current_state);													// Prints out state
+            
+            HashMap state_value = (HashMap) mapData.get(current_state);							// Get internal state hashmap (counties and their dimensions)
+            
+            for (Object current_county : state_value.keySet()){									// Iterate through all counties in state
+            	
+                System.out.print("   - " + current_county);										// Prints out county belonging to [this] state
+                ArrayList county_dimensions = (ArrayList) state_value.get(current_county);		// Get county's list of rectangular dimensions.
+                System.out.print(" " + county_dimensions + "\n");								// Print out county's dimensions (points form)
+                
+                // Store coordinates. Note ArrayList points order: [x1, y1, x2, y2]
+                /*Double x1, x2, y1, y2;
+                x1 = (Double) county_dimensions.get(0);			// Get x1
+                y1 = (Double) county_dimensions.get(1);			// Get y1
+                x2 = (Double) county_dimensions.get(2);			// Get x2
+                y2 = (Double) county_dimensions.get(3);			// Get y2
+                
+                // Create county node: name, x1, x2, y1, y2
+                RTreeNode countyNode = new RTreeNode(current_county.toString(), x1, x2, y1, y2);
+                
+                // Add county to state
+                stateNode.addChild(countyNode);*/
+            }
+        }
 	}
 	
 	/***
@@ -47,11 +74,68 @@ public class TesterClass {
 		return mapData.getStates();
 	}
 	
+	/**
+	 * Loads states' neighbors
+	 * @return
+	 * @throws IOException
+	 */
 	public static StateNeighbors LoadStateNeighborsList() throws IOException{
 		System.out.println("Loading State Neighbors data...");
 		StateNeighbors stateNeighbors = new StateNeighbors();
 		System.out.println("Loading State Neighbors completed...");
 		return stateNeighbors;
+	}
+	
+	/**
+	 * Creates a specific RTree: 
+	 * Level 1 (Root): The United States
+	 * Level 2: States
+	 * Level 3: Counties
+	 * @param mapData	Type: HashMap
+	 * @return
+	 */
+	public static RTreeNode CreateRTree(HashMap<String, HashMap<String, ArrayList>> mapData){
+		
+		RTreeNode rootNode = new RTreeNode();			// Root of tree
+		
+		//This prints out all the states. Just for debugging purposes.
+        for (Object current_state : mapData.keySet()) {											// Iterate through all states
+        	
+        	RTreeNode stateNode = new RTreeNode();												// Initialize current state's nodes
+            System.out.println(current_state);													// Prints out state
+            
+            HashMap state_value = (HashMap) mapData.get(current_state);							// Get internal state hashmap (counties and their dimensions)
+            
+            for (Object current_county : state_value.keySet()){									// Iterate through all counties in state
+            	
+                System.out.print("   - " + current_county);										// Prints out county belonging to [this] state
+                ArrayList county_dimensions = (ArrayList) state_value.get(current_county);		// Get county's list of rectangular dimensions.
+                System.out.print(" " + county_dimensions + "\n");								// Print out county's dimensions (points form)
+                
+                // Store coordinates. Note ArrayList points order: [x1, y1, x2, y2]
+                Double x1, x2, y1, y2;
+                
+                if (county_dimensions.size() < 4) continue;		// If ArrayList does not have 4 points, skip county
+                
+                x1 = (Double) county_dimensions.get(0);			// Get x1
+                y1 = (Double) county_dimensions.get(1);			// Get y1
+                x2 = (Double) county_dimensions.get(2);			// Get x2
+                y2 = (Double) county_dimensions.get(3);			// Get y2
+                
+                // Create county node: name, x1, x2, y1, y2
+                RTreeNode countyNode = new RTreeNode(current_county.toString(), x1, x2, y1, y2);
+                
+                // Add county to state
+                stateNode.addChild(countyNode);
+            }
+            
+            // Add state to root node
+            rootNode.addChild(stateNode);
+        }
+        
+        rootNode.setName("Root: United States");
+		
+		return rootNode;
 	}
 	
 	public static void TestRTreeNodeClass(){
