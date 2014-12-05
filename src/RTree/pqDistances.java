@@ -92,23 +92,22 @@ public class pqDistances
          this.queue.add(distance);
     }
 
-    //Print everything from queue
-    private printQueue(){
+    //Print top 'k' counties from the queue
+    private printQueue(int k){
 
          PriorityQueue<Double> temp_queue = new PriorityQueue<Double>(this.size, this.comparator);
 
          double d;
          String county_name;
-         while (temp_queue.size() != 0)
+         int counter = 0;
+         while ((temp_queue.size() != 0) && (counter < k) )
               d = temp_queue.remove();
              
               //Now find the distance 'd' in the hashmap to figure out which county 'distance' corresponds to
               county_name = (String)distance_mapping.get(d);
 
               System.out.println(county_name);
+              counter++;
     }
-
-
-
 
 }
