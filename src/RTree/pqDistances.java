@@ -106,8 +106,11 @@ public class pqDistances
               //Now find the distance 'd' in the hashmap to figure out which county 'distance' corresponds to
               county_name = (String)distance_mapping.get(d);
 
-              System.out.println(county_name);
+              System.out.println("County: " + county_name + "; distance: " + d);
               counter++;
     }
+
+
+
 
 }
