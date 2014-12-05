@@ -19,29 +19,30 @@ public class TesterClass {
 		RTreeNode_GlobalScale Root = CreateRTree(mapData_States);
 		//Root.printStats();	//test
 		
-		
-		//ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-118.809997, 46.694205); // WA
-		//ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-170.7583333, -13);		// AS
-		//ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-104.98, 39.7516667);	// CO
-		//ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-99.948225, 46.939944);	// ND --> include but also end at WA
-		//ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-83.600569, 37.706635);	// KY --> bigger list, includes KY
-		ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-121.657211, 40.569105);	// CA --> bigger list, includes CA
+		ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest;
+		//nodesContainingPointTest = Root.findNodesContainingPoint(-118.809997, 46.694205); // WA
+		//nodesContainingPointTest = Root.findNodesContainingPoint(-170.7583333, -13);		// AS
+		//nodesContainingPointTest = Root.findNodesContainingPoint(-104.98, 39.7516667);	// CO
+		nodesContainingPointTest = Root.findNodesContainingPoint(-99.948225, 46.939944);	// ND --> include but also end at WA
+		//nodesContainingPointTest = Root.findNodesContainingPoint(-83.600569, 37.706635);	// KY --> bigger list, includes KY
+		//nodesContainingPointTest = Root.findNodesContainingPoint(-121.657211, 40.569105);	// CA --> bigger list, includes CA
+		//nodesContainingPointTest = Root.findNodesContainingPoint(-71.433562, 42.551768);	// MA
 		for (int ii = 0; ii < nodesContainingPointTest.size(); ii++){
 			System.out.println(nodesContainingPointTest.get(ii).getName());
 		}
 		
 		
-		/*
+		
 		for (Object stateChild: Root.getChildren()){
 			stateChild = (RTreeNode_GlobalScale) stateChild;
-			if (!((RTreeNode_GlobalScale) stateChild).getName().equals("WA")) continue;
+			if (!((RTreeNode_GlobalScale) stateChild).getName().equals("NY")) continue;
 			((RTreeNode_GlobalScale) stateChild).printStats();
 			for (Object countyChild: ((RTreeNode_GlobalScale) stateChild).getChildren()){
 				countyChild = (RTreeNode_GlobalScale) countyChild;
 				((RTreeNode_GlobalScale) countyChild).printStats();
 			}
-		}*/
-		
+		}
+	
 		// Load state neighbors
 		//StateNeighbors stateNeighbors = LoadStateNeighborsList();
 		
@@ -73,7 +74,7 @@ public class TesterClass {
 	}
 	
 	/**
-	 * Creates a specific RTree: 
+	 * Creates a specific Rectangle Tree: 
 	 * Level 1 (Root): The United States
 	 * Level 2: States
 	 * Level 3: Counties

@@ -367,12 +367,18 @@ public class RTreeNode_GlobalScale {
 		if (this._y1 == 0) this._y1 = node._y1;
 		if (this._y2 == 0) this._y2 = node._y2;*/
 		
+		// Else expand when necessary normally
 		
 		if (node._x1 < this._x1 && this._x1 == 0) this._x1 = node._x1;
 		if (node._x2 > this._x2 && this._x2 == 0) this._x2 = node._x2;
 		if (node._y1 < this._y1 && this._y1 == 0) this._y1 = node._y1;
 		if (node._y2 > this._y2 && this._y2 == 0) this._y2 = node._y2;
 		
+		/*
+		if (node._x1 < this._x1 && this._x1 == 0) this._x1 = node._x1;
+		if (node._x2 > this._x2 && this._x2 == 0) this._x2 = node._x2;
+		if (node._y1 > this._y1 && this._y1 == 0) this._y1 = node._y1;
+		if (node._y2 < this._y2 && this._y2 == 0) this._y2 = node._y2;*/
 		
 		if (node._x1 < this._x1) this._x1 = node._x1;
 		if (node._x2 > this._x2) this._x2 = node._x2;
@@ -386,14 +392,19 @@ public class RTreeNode_GlobalScale {
 				this._x1 = node._x1;
 		}
 		
+		if (node._x1 > 0 && node._x1 < LONGITUDE_LIMIT && this._x1 > 0 && this._x1 < LONGITUDE_LIMIT){
+			if (node._x1 < this._x1)
+				this._x1 = node._x1;
+		}
+		
 		if (node._x2 < 0 && node._x2 > LONGITUDE_LIMIT * -1 && this._x2 < 0 && this._x2 > LONGITUDE_LIMIT * -1){
-			if (node._x2 > this._x2)
+			if (node._x2 < this._x2)
 				this._x2 = node._x2;
 		}
 		
 		if (node._x2 > 0 && node._x2 < LONGITUDE_LIMIT && this._x2 > 0 && this._x2 < LONGITUDE_LIMIT){
-			if (node._x2 > 0 && node._x2 < LONGITUDE_LIMIT){
-				
+			if (node._x2 > this._x2){
+				this._x2 = node._x2;
 			}
 		}
 		
@@ -405,8 +416,8 @@ public class RTreeNode_GlobalScale {
 		if (node._y2 > 0 && this._y2 > 0){
 			if (node._y2 < this._y2)
 				this._y2 = node._y2;
-		}
-		*/
+		}*/
+		
 		
 		// Update width and height
 		this.updateWidth();
