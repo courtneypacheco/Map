@@ -20,7 +20,7 @@ public class RTreeNode_GlobalScale {
 	private double _y2;
 	private double _width;
 	private double _height;
-	private double _center;	
+	private double[] _center;	
 
 	//private HashMap Children = new HashMap<Object, Object>();
 	private ArrayList<RTreeNode_GlobalScale> _Children;
