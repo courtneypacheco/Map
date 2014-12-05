@@ -47,9 +47,26 @@ public class CommandLine {
     			// Load map data
     			MapData mapData_States = new MapData("src\\NationalFile_StateProvinceDecimalLatLong.txt");
     		
+    		
+    		ArrayList<RTreeNode_GlobalScale> nodesContainingPoint;
+		nodesContainingPoint = Root.findNodesContainingPoint(y, x);
+		String stateAbbrv = null;
+		for (int ii = 0; ii < nodesContainingPoint.size(); ii++){
+			
+			RTreeNode_GlobalScale currentStateNode = nodesContainingPoint.get(ii);				// Get current state node
+			stateAbbrv = currentStateNode.getName();										// Get name of state (abbreviation)
+			
+			if (!stateAbbrv.equals("Root: United States")) continue;	
+		}
+		
+		// Display resulting nodes that point is in or nearby
+		for (int ii = 0; ii < nodesContainingPoint.size(); ii++){
+			System.out.println("From recursive function. Nodes containing test point: " + nodesContainingPoint.get(ii).getName());
+		}
+    		
     			// Try priority queue
     			//pqDistances pq = new pqDistances(mapData_States.States, 100, "CO", -104.98, 39.7516667);
-    			pqDistances pq = new pqDistances(mapData_States.States, 100, "CO", y, x, k); // longitude (y), latitude (x)
+    			pqDistances pq = new pqDistances(mapData_States.States, 100, stateAbbrv, y, x, k); // longitude (y), latitude (x)
     			pq.printQueue(k);
         	}
 	}
