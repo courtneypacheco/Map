@@ -19,11 +19,6 @@ public class TesterClass {
 		// Load state neighbors
 		StateNeighbors stateNeighbors = LoadStateNeighborsList();
 		
-		Set<String> keys = stateNeighbors.stateNeighbors.keySet();
-		for (String key: keys) {
-			//System.out.println(key + ": " + stateNeighbors.stateNeighbors.get(key));
-		}
-		
 		// Create RTree
 		RTreeNode_GlobalScale Root = CreateRTree(mapData_States);
 		
@@ -65,17 +60,20 @@ public class TesterClass {
 					//Counties.add(current_county);												// If it is, add county to list
 				//}
 				
-				//Counties.add(current_county);													// Add county to arraylist
-				
 				//current_county.printStats();													// Prints
 				double distance = current_county.calculateDistance(longitude, latitude);		// Calculate distance from this county
 				NearestCounties.put(current_county.getName(), distance);						// Add county to hashmap<string, double> [key: county name, value: distance]
 				
-				
 				//System.out.println(current_county.calculateDistance(longitude, latitude));
-				
 			}
 			
+			
+			// Now check this state's neighbors
+			Set<String> keys = stateNeighbors.stateNeighbors.keySet();
+			for (String key: keys) {
+				if (!key.equals(stateAbbrv)) continue;
+				System.out.println(key + ": " + stateNeighbors.stateNeighbors.get(key));
+			}
 		}
 		
 		// Iterates through NearestCounties list and prints out all the counties and their distance from point
