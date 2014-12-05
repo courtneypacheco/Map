@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import LoadData.MapData;
 import RTree.RTreeNode;
 import StateNeighbors.StateNeighbors;
@@ -10,24 +12,39 @@ public class TesterClass {
 	public static void main(String[] args) throws IOException {
 		
 		// Load map data
-		MapData mapData = LoadMapData("src\\NationalFile_StateProvinceDecimalLatLong.txt");
+		HashMap mapData_States = LoadMapData("src\\NationalFile_StateProvinceDecimalLatLong.txt");
+		
+        //This prints out all the states. Just for debugging purposes.
+        for (Object current_state : mapData_States.keySet()) {									// Iterate through all states
+            System.out.println(current_state);													// Prints out state
+            
+            HashMap state_value = (HashMap) mapData_States.get(current_state);							// Get internal state hashmap
+            
+            for (Object current_county : state_value.keySet()){									// Iterate through all counties in state
+            	
+                System.out.print("   - " + current_county);										// Prints out county belonging to [this] state
+                ArrayList county_dimensions = (ArrayList) state_value.get(current_county);		// Get county's list of rectangular dimensions
+                System.out.print(" " + county_dimensions + "\n");								// Print out county's dimensions
+            }
+        }
+        
 		
 		// Load state neighbors
-		StateNeighbors stateNeighbors = LoadStateNeighborsList();
+		//StateNeighbors stateNeighbors = LoadStateNeighborsList();
 		
 		// Test RTreeNode methods
-		TestRTreeNodeClass();
+		//TestRTreeNodeClass();
 	}
 	
 	/***
 	 * Loads input map data for application
 	 * @throws IOException
 	 */
-	public static MapData LoadMapData(String filename) throws IOException{
+	public static HashMap LoadMapData(String filename) throws IOException{
 		System.out.println("Loading Map Data...");
 		MapData mapData = new MapData(filename);
 		System.out.println("Loading Map Data completed...");
-		return mapData;
+		return mapData.getStates();
 	}
 	
 	public static StateNeighbors LoadStateNeighborsList() throws IOException{

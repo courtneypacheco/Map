@@ -4,6 +4,11 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 //import java.util.HashMap;
 
+/**
+ * Modified R-Tree node, specifically designed for the purpose of structuring regions of interest: State, Counties, etc.
+ * @author Jeannie
+ *
+ */
 public class RTreeNode {
 	
 	//#region Private Variables -----------------------------------

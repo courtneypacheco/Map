@@ -20,6 +20,10 @@ public class MapData{
         loadFile();
     }
     
+    public HashMap<String, HashMap<String, ArrayList>> getStates(){
+    	return States;
+    }
+    
     private void loadFile() throws FileNotFoundException, IOException{
         
         //Initialize variables
