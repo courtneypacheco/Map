@@ -16,11 +16,19 @@ public class TesterClass {
 		// Load map data
 		HashMap mapData_States = LoadMapData("src\\NationalFile_StateProvinceDecimalLatLong.txt");
 		
+		
 		// Load state neighbors
 		StateNeighbors stateNeighbors = LoadStateNeighborsList();
 		
+		
 		// Create RTree
 		RTreeNode_GlobalScale Root = CreateRTree(mapData_States);
+		
+		
+		// Find the state(s) the user-input point is in or nearby
+		double longitude, latitude;
+		longitude = 36.272302;
+		latitude = -85.498725;
 		
 		ArrayList<RTreeNode_GlobalScale> nodesContainingPoint;
 		//nodesContainingPointTest = Root.findNodesContainingPoint(-118.809997, 46.694205); // WA
@@ -32,26 +40,26 @@ public class TesterClass {
 		//nodesContainingPointTest = Root.findNodesContainingPoint(-71.433562, 42.551768);	// MA
 		nodesContainingPoint = Root.findNodesContainingPoint(-85.498725, 36.272302);		// TN
 		
-		double longitude, latitude;
-		longitude = 36.272302;
-		latitude = -85.498725;
 		
+		// Display resulting nodes that point is in or nearby
 		for (int ii = 0; ii < nodesContainingPoint.size(); ii++){
 			System.out.println("From recursive function. Nodes containing test point: " + nodesContainingPoint.get(ii).getName());
 		}
 		
-		// Structures containing nearest counties
+		
+		// Initialize structures containing nearest counties
 		ArrayList<RTreeNode_GlobalScale> Counties = new ArrayList();
 		HashMap<String, Double> NearestCounties = new HashMap<String, Double>();
 		
-		// Go through arraylist of state nodes
+		
+		// Go through arraylist of state nodes that point is or may be in
 		for (int ii = 0; ii < nodesContainingPoint.size(); ii++){
 			
 			RTreeNode_GlobalScale currentStateNode = nodesContainingPoint.get(ii);				// Get current state node
 			String stateAbbrv = currentStateNode.getName();										// Get name of state (abbreviation)
 			
 			if (stateAbbrv.equals("Root: United States")) continue;								// Check that it is not the root node
-				
+			
 			System.out.println("Counties in state: " + stateAbbrv);
 			
 			for (RTreeNode_GlobalScale current_county : currentStateNode.getChildren()) {		// Iterate through this state's counties
@@ -59,34 +67,63 @@ public class TesterClass {
 				//if (current_county.containsPoint(longitude, latitude)){						// Check if point is directly in county
 					//Counties.add(current_county);												// If it is, add county to list
 				//}
-				
 				//current_county.printStats();													// Prints
-				double distance = current_county.calculateDistance(longitude, latitude);		// Calculate distance from this county
-				NearestCounties.put(current_county.getName(), distance);						// Add county to hashmap<string, double> [key: county name, value: distance]
 				
-				//System.out.println(current_county.calculateDistance(longitude, latitude));
+				double distance = current_county.calculateDistance(longitude, latitude);		// Calculate distance from this county
+				//String stateAndCounty = stateAbbrv + " " + current_county.getName();
+				NearestCounties.put(current_county.getName(), distance);						// Add county to hashmap<string, double> [key: state and county name, value: distance]
 			}
 			
-			
-			// Now check this state's neighbors
-			Set<String> keys = stateNeighbors.stateNeighbors.keySet();
+			// Now find this state's state neighbors
+			ArrayList<String> neighbors = new ArrayList<String>();
+			Set<String> keys = StateNeighbors.stateNeighbors.keySet();
 			for (String key: keys) {
+				
 				if (!key.equals(stateAbbrv)) continue;
-				System.out.println(key + ": " + stateNeighbors.stateNeighbors.get(key));
+				
+				neighbors.addAll(StateNeighbors.stateNeighbors.get(key));
+				System.out.println(key + ": " + StateNeighbors.stateNeighbors.get(key));
 			}
+			
+			// Print out this state's neighbors
+			for (int jj = 0; jj < neighbors.size(); jj++){
+				System.out.println(neighbors.get(jj).toString());
+			}
+			
+			// Place this state's neighbors' counties and calculated distance into NearestCounties hashmap
+			for (int jj = 0; jj < neighbors.size(); jj++){
+				
+				String neighborAbbrv = neighbors.get(jj).toString();
+				RTreeNode_GlobalScale currentNeighborNode = Root.getChildByName(neighborAbbrv);				// Get current state node
+				
+				System.out.println("Counties in state: " + neighborAbbrv);
+				
+				for (RTreeNode_GlobalScale current_county : currentNeighborNode.getChildren()) {			// Iterate through this state's counties
+					
+					double distance = current_county.calculateDistance(longitude, latitude);				// Calculate distance from this county
+					String stateAndCounty = neighborAbbrv + " " + current_county.getName();					// 
+					NearestCounties.put(current_county.getName(), distance);								// Add county to hashmap<string, double> [key: state and county name, value: distance]
+				}
+				
+				//System.out.println(neighbors.get(jj).toString());
+			}
+			
 		}
+		
 		
 		// Iterates through NearestCounties list and prints out all the counties and their distance from point
         for (Object key: NearestCounties.keySet()) {
             System.out.println("County name: " + key + ", Distance: " + NearestCounties.get(key));
         }
 		
+        
 		// Print out all county info
 		/*for (RTreeNode_GlobalScale current_county : Counties){
 			current_county.printStats();
 		}*/
 		
 		
+        
 		// Iterate through list of nodes (states) containing point
 		for (int ii = 0; ii < nodesContainingPoint.size(); ii++){
 			
@@ -100,8 +137,8 @@ public class TesterClass {
 			}
 		}
         	
+		
         //stateNode.setName(current_state.toString());										// Add state's name to node
-            
         //HashMap state_value = (HashMap) mapData.get(current_state);						// Get internal state hashmap (counties and their dimensions)
             
 		/*
@@ -114,10 +151,7 @@ public class TesterClass {
 				((RTreeNode_GlobalScale) countyChild).printStats();
 			}
 		}*/
-	
 		
-		// Test RTreeNode_GlobalScale methods
-		//TestRTreeNode_GlobalScaleClass();
 	}
 	
 	/***
