@@ -13,7 +13,7 @@ public class pqDistances
        @param size = size of the priority queue (i.e., max # of values the queue can hold)
     */
     pqDistances(int size){
-         this.comparator = = new pqComparator();
+         this.comparator = new pqComparator();
          this.queue = new PriorityQueue<Double>(size, this.comparator);
          this.size = size;
     }
