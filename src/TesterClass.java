@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import LoadData.MapData;
 import RTree.RTreeNode;
@@ -15,24 +16,79 @@ public class TesterClass {
 		// Load map data
 		HashMap mapData_States = LoadMapData("src\\NationalFile_StateProvinceDecimalLatLong.txt");
 		
+		// Load state neighbors
+		StateNeighbors stateNeighbors = LoadStateNeighborsList();
+		
+		Set<String> keys = stateNeighbors.stateNeighbors.keySet();
+		for (String key: keys) {
+			//System.out.println(key + ": " + stateNeighbors.stateNeighbors.get(key));
+		}
+		
 		// Create RTree
 		RTreeNode_GlobalScale Root = CreateRTree(mapData_States);
-		//Root.printStats();	//test
 		
-		ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest;
+		ArrayList<RTreeNode_GlobalScale> nodesContainingPoint;
 		//nodesContainingPointTest = Root.findNodesContainingPoint(-118.809997, 46.694205); // WA
 		//nodesContainingPointTest = Root.findNodesContainingPoint(-170.7583333, -13);		// AS
 		//nodesContainingPointTest = Root.findNodesContainingPoint(-104.98, 39.7516667);	// CO
-		nodesContainingPointTest = Root.findNodesContainingPoint(-99.948225, 46.939944);	// ND --> include but also end at WA
+		//nodesContainingPointTest = Root.findNodesContainingPoint(-99.948225, 46.939944);	// ND --> include but also end at WA
 		//nodesContainingPointTest = Root.findNodesContainingPoint(-83.600569, 37.706635);	// KY --> bigger list, includes KY
 		//nodesContainingPointTest = Root.findNodesContainingPoint(-121.657211, 40.569105);	// CA --> bigger list, includes CA
 		//nodesContainingPointTest = Root.findNodesContainingPoint(-71.433562, 42.551768);	// MA
-		for (int ii = 0; ii < nodesContainingPointTest.size(); ii++){
-			System.out.println(nodesContainingPointTest.get(ii).getName());
+		nodesContainingPoint = Root.findNodesContainingPoint(-85.498725, 36.272302);		// TN
+		
+		double longitude, latitude;
+		longitude = 36.272302;
+		latitude = -85.498725;
+		
+		for (int ii = 0; ii < nodesContainingPoint.size(); ii++){
+			System.out.println("From recursive function. Nodes containing test point: " + nodesContainingPoint.get(ii).getName());
 		}
 		
+		// ArrayList containing nearest counties
+		ArrayList Counties = new ArrayList();
 		
+		// Go through arraylist of state nodes
+		for (int ii = 0; ii < nodesContainingPoint.size(); ii++){
+			
+			RTreeNode_GlobalScale currentStateNode = nodesContainingPoint.get(ii);				// Get current state node
+			String stateAbbrv = currentStateNode.getName();										// Get name of state (abbreviation)
+			
+			if (!stateAbbrv.equals("Root: United States")){										// Check that it is not the root node
+				
+				for (RTreeNode_GlobalScale current_county : currentStateNode.getChildren()) {	// Iterate through this state's counties
+					
+					if (current_county.containsPoint(longitude, latitude)){						// Check if point is directly in county
+						Counties.add(current_county);											// If it is, add county to list
+					}
+					
+					//current_county.calculateDistance(longitude, latitude);					// Calculate distance from this county
+					System.out.println(current_county.calculateDistance(longitude, latitude));
+					
+					(current_county).printStats();												// Prints
+					
+				}
+			}
+		}
 		
+		// Iterate through list of nodes (states) containing point
+		for (int ii = 0; ii < nodesContainingPoint.size(); ii++){
+			
+			String stateAbbrv = nodesContainingPoint.get(ii).getName();							// Get name of state (abbreviation)
+			for (Object current_state : mapData_States.keySet()) {								// Iterate through all states
+				
+				if (current_state.toString().equals(stateAbbrv)){								// Find matching state
+					System.out.println(current_state);											// Prints out state if matches
+					break;
+				}
+			}
+		}
+        	
+        //stateNode.setName(current_state.toString());										// Add state's name to node
+            
+        //HashMap state_value = (HashMap) mapData.get(current_state);						// Get internal state hashmap (counties and their dimensions)
+            
+		/*
 		for (Object stateChild: Root.getChildren()){
 			stateChild = (RTreeNode_GlobalScale) stateChild;
 			if (!((RTreeNode_GlobalScale) stateChild).getName().equals("NY")) continue;
@@ -41,10 +97,8 @@ public class TesterClass {
 				countyChild = (RTreeNode_GlobalScale) countyChild;
 				((RTreeNode_GlobalScale) countyChild).printStats();
 			}
-		}
+		}*/
 	
-		// Load state neighbors
-		//StateNeighbors stateNeighbors = LoadStateNeighborsList();
 		
 		// Test RTreeNode_GlobalScale methods
 		//TestRTreeNode_GlobalScaleClass();
@@ -92,16 +146,16 @@ public class TesterClass {
         	//if (!current_state.toString().equals("MH")) continue;
         	
         	RTreeNode_GlobalScale stateNode = new RTreeNode_GlobalScale();						// Initialize current state's nodes
-            System.out.println(current_state);													// Prints out state
+            //System.out.println(current_state);													// Prints out state
             stateNode.setName(current_state.toString());										// Add state's name to node
             
             HashMap state_value = (HashMap) mapData.get(current_state);							// Get internal state hashmap (counties and their dimensions)
             
             for (Object current_county : state_value.keySet()){									// Iterate through all counties in state
             	
-                System.out.print("   - " + current_county);										// Prints out county belonging to [this] state
+                //System.out.print("   - " + current_county);										// Prints out county belonging to [this] state
                 ArrayList county_dimensions = (ArrayList) state_value.get(current_county);		// Get county's list of rectangular dimensions.
-                System.out.print(" " + county_dimensions + "\n");								// Print out county's dimensions (points form)
+                //System.out.print(" " + county_dimensions + "\n");								// Print out county's dimensions (points form)
                 
                 // Store coordinates. Note ArrayList points order: [x1, y1, x2, y2]
                 Double x1, x2, y1, y2;

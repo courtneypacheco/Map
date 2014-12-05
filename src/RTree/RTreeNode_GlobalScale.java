@@ -92,20 +92,24 @@ public class RTreeNode_GlobalScale {
 		double mid_y = (this._y2 + this._y1) / 2;
 		
 		double[] center = { mid_x , mid_y };
-
-		return this._center = center;
+		this._center = center;
+		
+		return this._center; 
 	}
 
 	//Get distance
 	public double calculateDistance(double longitude, double latitude){
-
+		
+		this.getCenter();
 		double x = (longitude - this._center[0]) * Math.cos((latitude + this._center[1])/2);
 		double y = (latitude - this._center[1]);
-		return Math.sqrt(x*x + y*y);
+		//double x = Math.max((Math.abs(longitude - this._center[0])) - this._width / 2, 0);
+		//double y = Math.max((Math.abs(longitude - this._center[1])) - this._height / 2, 0);
+		
+		return Math.sqrt(x * x + y * y) * 6371;
 	}
-
-
 	//#endregion Properties ---------------------------------------
+	
 	
 	//#region Methods ---------------------------------------------
 	/**
