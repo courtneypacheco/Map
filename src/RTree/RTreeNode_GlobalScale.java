@@ -344,11 +344,69 @@ public class RTreeNode_GlobalScale {
 	 * @param node	<code>RTreeNode_GlobalScale</code>Input node to incorporate
 	 */
 	public void expandRegion(RTreeNode_GlobalScale node){
+		
+		double LONGITUDE_LIMIT = 180;
+		
 		// Expand when necessary (one bound is farther out than the other)
+		/*if (node._x1 < this._x1) this._x1 = node._x1;
+		if (node._x2 > this._x2) this._x2 = node._x2;
+		if (node._y1 < this._y1) this._y1 = node._y1;
+		if (node._y2 > this._y2) this._y2 = node._y2;*/
+		
+		
+		// If x1, x2, y1, y2 not set, then this is *probably* the first expansion. Expand.
+		if (this._x1 == 0 && this._x2 == 0 && this._y1 == 0 && this._y2 == 0){
+			this._x1 = node._x1;
+			this._x2 = node._x2;
+			this._y1 = node._y1;
+			this._y2 = node._y2;
+		}
+		
+		/*if (this._x1 == 0) this._x1 = node._x1;
+		if (this._x2 == 0) this._x2 = node._x2;
+		if (this._y1 == 0) this._y1 = node._y1;
+		if (this._y2 == 0) this._y2 = node._y2;*/
+		
+		
+		if (node._x1 < this._x1 && this._x1 == 0) this._x1 = node._x1;
+		if (node._x2 > this._x2 && this._x2 == 0) this._x2 = node._x2;
+		if (node._y1 < this._y1 && this._y1 == 0) this._y1 = node._y1;
+		if (node._y2 > this._y2 && this._y2 == 0) this._y2 = node._y2;
+		
+		
 		if (node._x1 < this._x1) this._x1 = node._x1;
 		if (node._x2 > this._x2) this._x2 = node._x2;
 		if (node._y1 < this._y1) this._y1 = node._y1;
 		if (node._y2 > this._y2) this._y2 = node._y2;
+		
+		/*
+		// If new node x1 and this node x1 are both less than 0 and greater than -1*limit, compare to expand 
+		if (node._x1 < 0 && node._x1 > LONGITUDE_LIMIT * -1 && this._x1 < 0 && this._x1 > LONGITUDE_LIMIT * -1){
+			if (node._x1 < this._x1)
+				this._x1 = node._x1;
+		}
+		
+		if (node._x2 < 0 && node._x2 > LONGITUDE_LIMIT * -1 && this._x2 < 0 && this._x2 > LONGITUDE_LIMIT * -1){
+			if (node._x2 > this._x2)
+				this._x2 = node._x2;
+		}
+		
+		if (node._x2 > 0 && node._x2 < LONGITUDE_LIMIT && this._x2 > 0 && this._x2 < LONGITUDE_LIMIT){
+			if (node._x2 > 0 && node._x2 < LONGITUDE_LIMIT){
+				
+			}
+		}
+		
+		if (node._y1 > 0 && this._y1 > 0){
+			if (node._y1 > this._y1)
+				this._y1 = node._y1;
+		}
+		
+		if (node._y2 > 0 && this._y2 > 0){
+			if (node._y2 < this._y2)
+				this._y2 = node._y2;
+		}
+		*/
 		
 		// Update width and height
 		this.updateWidth();

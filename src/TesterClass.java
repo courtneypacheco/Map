@@ -17,11 +17,11 @@ public class TesterClass {
 		
 		// Create RTree
 		RTreeNode_GlobalScale Root = CreateRTree(mapData_States);
-		Root.printStats();	//test
+		//Root.printStats();	//test
 		
-		//-14.5375	 -168.1488889
+		
 		//ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-118.809997, 46.694205); // WA
-		//ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-170.7583333, -13);	// AS
+		//ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-170.7583333, -13);		// AS
 		//ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-104.98, 39.7516667);	// CO
 		//ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-99.948225, 46.939944);	// ND --> include but also end at WA
 		//ArrayList<RTreeNode_GlobalScale> nodesContainingPointTest = Root.findNodesContainingPoint(-83.600569, 37.706635);	// KY --> bigger list, includes KY
@@ -31,10 +31,10 @@ public class TesterClass {
 		}
 		
 		
-		
-		
-		/*for (Object stateChild: Root.getChildren()){
+		/*
+		for (Object stateChild: Root.getChildren()){
 			stateChild = (RTreeNode_GlobalScale) stateChild;
+			if (!((RTreeNode_GlobalScale) stateChild).getName().equals("WA")) continue;
 			((RTreeNode_GlobalScale) stateChild).printStats();
 			for (Object countyChild: ((RTreeNode_GlobalScale) stateChild).getChildren()){
 				countyChild = (RTreeNode_GlobalScale) countyChild;
