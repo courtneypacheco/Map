@@ -1,9 +1,11 @@
 package GUI;
 
+import java.applet.*;
 import javax.swing.*;
 import java.awt.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.BrowserFactory;
 
