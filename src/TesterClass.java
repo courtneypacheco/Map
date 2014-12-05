@@ -46,7 +46,7 @@ public class TesterClass {
 		}
 		
 		// ArrayList containing nearest counties
-		ArrayList Counties = new ArrayList();
+		ArrayList<RTreeNode_GlobalScale> Counties = new ArrayList();
 		
 		// Go through arraylist of state nodes
 		for (int ii = 0; ii < nodesContainingPoint.size(); ii++){
@@ -54,21 +54,22 @@ public class TesterClass {
 			RTreeNode_GlobalScale currentStateNode = nodesContainingPoint.get(ii);				// Get current state node
 			String stateAbbrv = currentStateNode.getName();										// Get name of state (abbreviation)
 			
-			if (!stateAbbrv.equals("Root: United States")){										// Check that it is not the root node
+			if (stateAbbrv.equals("Root: United States")) continue;								// Check that it is not the root node
 				
-				for (RTreeNode_GlobalScale current_county : currentStateNode.getChildren()) {	// Iterate through this state's counties
-					
-					if (current_county.containsPoint(longitude, latitude)){						// Check if point is directly in county
-						Counties.add(current_county);											// If it is, add county to list
-					}
-					
-					//current_county.calculateDistance(longitude, latitude);					// Calculate distance from this county
-					System.out.println(current_county.calculateDistance(longitude, latitude));
-					
-					(current_county).printStats();												// Prints
-					
-				}
+			for (RTreeNode_GlobalScale current_county : currentStateNode.getChildren()) {		// Iterate through this state's counties
+				
+				//if (current_county.containsPoint(longitude, latitude)){						// Check if point is directly in county
+					//Counties.add(current_county);												// If it is, add county to list
+				//}
+				
+				Counties.add(current_county);													// Add county
+				
+				(current_county).printStats();													// Prints
+				current_county.calculateDistance(longitude, latitude);							// Calculate distance from this county
+				System.out.println(current_county.calculateDistance(longitude, latitude));
+				
 			}
+			
 		}
 		
 		// Iterate through list of nodes (states) containing point
