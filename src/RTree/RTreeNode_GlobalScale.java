@@ -20,7 +20,7 @@ public class RTreeNode_GlobalScale {
 	private double _y2;
 	private double _width;
 	private double _height;
-	private double[] _center;	
+	private double[] _center;
 
 	//private HashMap Children = new HashMap<Object, Object>();
 	private ArrayList<RTreeNode_GlobalScale> _Children;
@@ -47,6 +47,7 @@ public class RTreeNode_GlobalScale {
 	public void setX1(double x){
 		this._x1 = x;
 		this.updateWidth();
+		this.getCenter();
 	}
 	
 	// X2
@@ -56,6 +57,7 @@ public class RTreeNode_GlobalScale {
 	public void setX2(double x){
 		this._x2 = x;
 		this.updateWidth();
+		this.getCenter();
 	}
 	
 	// Y1
@@ -102,11 +104,19 @@ public class RTreeNode_GlobalScale {
 		
 		this.getCenter();
 		double x = (longitude - this._center[0]) * Math.cos((latitude + this._center[1])/2);
-		double y = (latitude - this._center[1]);
+		double y = latitude - this._center[1];
 		//double x = Math.max((Math.abs(longitude - this._center[0])) - this._width / 2, 0);
-		//double y = Math.max((Math.abs(longitude - this._center[1])) - this._height / 2, 0);
+		//double y = Math.max((Math.abs(latitude - this._center[1])) - this._height / 2, 0);
+		
+		/*double R = 6371;
+		double x = this._center[0] - longitude;
+		double y = this._center[1] - latitude;
+		double a = Math.pow(Math.sin(y / 2), 2) + Math.cos(this._center[1]) * Math.cos(this._center[0]) * Math.pow(Math.sin(x / 2), 2);
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		double d = R * c;*/
 		
 		return Math.sqrt(x * x + y * y) * 6371;
+		//return d;
 	}
 	//#endregion Properties ---------------------------------------
 	
@@ -124,6 +134,7 @@ public class RTreeNode_GlobalScale {
 		this._width = 0;
 		this._height = 0;
 		this._Children = new ArrayList<RTreeNode_GlobalScale>();
+		this.getCenter();
 	}
 	
 	/**
@@ -190,6 +201,8 @@ public class RTreeNode_GlobalScale {
 			this._y1 = y1;
 			this._y2 = y2;
 		}*/
+		
+		this.getCenter();
 		
 		// Update width
 		this.updateWidth();
@@ -460,6 +473,8 @@ public class RTreeNode_GlobalScale {
 		System.out.println("y2 = " + this._y2);
 		System.out.println("width = " + this._width);
 		System.out.println("height = " + this._height);
+		System.out.println("center longitude: " + this._center[0]);
+		System.out.println("center latitude: " + this._center[1]);
 	}
 	
 	/***
