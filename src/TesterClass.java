@@ -45,8 +45,9 @@ public class TesterClass {
 			System.out.println("From recursive function. Nodes containing test point: " + nodesContainingPoint.get(ii).getName());
 		}
 		
-		// ArrayList containing nearest counties
+		// Structures containing nearest counties
 		ArrayList<RTreeNode_GlobalScale> Counties = new ArrayList();
+		HashMap<String, Double> NearestCounties = new HashMap<String, Double>();
 		
 		// Go through arraylist of state nodes
 		for (int ii = 0; ii < nodesContainingPoint.size(); ii++){
@@ -56,21 +57,37 @@ public class TesterClass {
 			
 			if (stateAbbrv.equals("Root: United States")) continue;								// Check that it is not the root node
 				
+			System.out.println("Counties in state: " + stateAbbrv);
+			
 			for (RTreeNode_GlobalScale current_county : currentStateNode.getChildren()) {		// Iterate through this state's counties
 				
 				//if (current_county.containsPoint(longitude, latitude)){						// Check if point is directly in county
 					//Counties.add(current_county);												// If it is, add county to list
 				//}
 				
-				Counties.add(current_county);													// Add county
+				//Counties.add(current_county);													// Add county to arraylist
 				
-				(current_county).printStats();													// Prints
-				current_county.calculateDistance(longitude, latitude);							// Calculate distance from this county
-				System.out.println(current_county.calculateDistance(longitude, latitude));
+				//current_county.printStats();													// Prints
+				double distance = current_county.calculateDistance(longitude, latitude);		// Calculate distance from this county
+				NearestCounties.put(current_county.getName(), distance);						// Add county to hashmap<string, double> [key: county name, value: distance]
+				
+				
+				//System.out.println(current_county.calculateDistance(longitude, latitude));
 				
 			}
 			
 		}
+		
+		// Iterates through NearestCounties list and prints out all the counties and their distance from point
+        for (Object key: NearestCounties.keySet()) {
+            System.out.println("County name: " + key + ", Distance: " + NearestCounties.get(key));
+        }
+		
+		// Print out all county info
+		/*for (RTreeNode_GlobalScale current_county : Counties){
+			current_county.printStats();
+		}*/
+		
 		
 		// Iterate through list of nodes (states) containing point
 		for (int ii = 0; ii < nodesContainingPoint.size(); ii++){

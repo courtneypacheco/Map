@@ -108,14 +108,14 @@ public class RTreeNode_GlobalScale {
 		//double x = Math.max((Math.abs(longitude - this._center[0])) - this._width / 2, 0);
 		//double y = Math.max((Math.abs(latitude - this._center[1])) - this._height / 2, 0);
 		
-		/*double R = 6371;
-		double x = this._center[0] - longitude;
+		double R = 6371;
+		/*double x = this._center[0] - longitude;
 		double y = this._center[1] - latitude;
 		double a = Math.pow(Math.sin(y / 2), 2) + Math.cos(this._center[1]) * Math.cos(this._center[0]) * Math.pow(Math.sin(x / 2), 2);
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 		double d = R * c;*/
 		
-		return Math.sqrt(x * x + y * y) * 6371;
+		return Math.sqrt(x * x + y * y) * R;
 		//return d;
 	}
 	//#endregion Properties ---------------------------------------
