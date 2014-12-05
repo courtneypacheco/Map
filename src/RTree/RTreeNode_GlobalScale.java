@@ -20,7 +20,8 @@ public class RTreeNode_GlobalScale {
 	private double _y2;
 	private double _width;
 	private double _height;
-	
+	private double[] _center;	
+
 	//private HashMap Children = new HashMap<Object, Object>();
 	private ArrayList<RTreeNode_GlobalScale> _Children;
 	//#endregion Private Variables --------------------------------
@@ -84,6 +85,26 @@ public class RTreeNode_GlobalScale {
 	public double getHeight(){
 		return this._height;
 	}
+
+	//Get coordinates for the center of the county
+	public double[] getCenter(){
+		double mid_x = (this._x2 + this._x1) / 2;
+		double mid_y = (this._y2 + this._y1) / 2;
+		
+		double center = { mid_x , mid_y };
+
+		this.center = center;
+	}
+
+	//Get distance
+	public double calculateDistance(double longitude, double latitude){
+
+		double x = (longitude - this._center[0]) * Math.cos((latitude + this._center[1])/2);
+		double y = (latitude - this.center[1]);
+		return Math.sqrt(x*x + y*y);
+	}
+
+
 	//#endregion Properties ---------------------------------------
 	
 	//#region Methods ---------------------------------------------
