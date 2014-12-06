@@ -361,6 +361,6 @@ public class StateNeighbors {
 				System.out.println(countkey + ": " + stateNeighbors.get(key));
 			}*/
 		//}
-		System.out.println("Finished loading state neighbors list.");
+		System.out.println("State Neighbors list created.");
 	}
 }

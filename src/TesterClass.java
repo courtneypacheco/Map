@@ -49,7 +49,6 @@ import java.util.HashMap;
 import java.util.Set;
 
 import LoadData.MapData;
-import RTree.RTreeNode;
 import RTree.RTreeNode_GlobalScale;
 import StateNeighbors.StateNeighbors;
 
@@ -71,7 +70,8 @@ public class TesterClass {
 		
 		
 		// Find the state(s) the user-input point is in or nearby
-		double longitude, latitude;
+		double longitude = 0;
+		double latitude = 0;
 		latitude = 40.5085;
 		longitude = -74.5002;
 		
@@ -84,7 +84,7 @@ public class TesterClass {
 		//nodesContainingPointTest = Root.findNodesContainingPoint(-121.657211, 40.569105);	// CA --> bigger list, includes CA
 		//nodesContainingPointTest = Root.findNodesContainingPoint(-71.433562, 42.551768);	// MA
 		//nodesContainingPoint = Root.findNodesContainingPoint(-85.498725, 36.272302);		// TN
-		nodesContainingPoint = Root.findNodesContainingPoint(longitude, latitude);		// MA
+		nodesContainingPoint = Root.findNodesContainingPoint(longitude, latitude);			// MA/test
 		
 		
 		// Display resulting nodes that point is in or nearby
@@ -94,7 +94,6 @@ public class TesterClass {
 		
 		
 		// Initialize structures containing nearest counties
-		ArrayList<RTreeNode_GlobalScale> Counties = new ArrayList();
 		HashMap<String, Double> NearestCounties = new HashMap<String, Double>();
 		
 		
@@ -111,8 +110,8 @@ public class TesterClass {
 			for (RTreeNode_GlobalScale current_county : currentStateNode.getChildren()) {		// Iterate through this state's counties
 				
 				double distance = current_county.calculateDistance(longitude, latitude);		// Calculate distance from this county
-				String stateAndCounty = stateAbbrv + " " + current_county.getName();
-				NearestCounties.put(stateAndCounty, distance);						// Add county to hashmap<string, double> [key: state and county name, value: distance]
+				String stateAndCounty = stateAbbrv + " " + current_county.getName();			// Include state and county name for keeping track
+				NearestCounties.put(stateAndCounty, distance);									// Add county to hashmap<string, double> [key: state and county name, value: distance]
 			}
 			
 			// Now find this state's state neighbors
@@ -124,11 +123,6 @@ public class TesterClass {
 				
 				neighbors.addAll(StateNeighbors.stateNeighbors.get(key));
 				System.out.println(key + ": " + StateNeighbors.stateNeighbors.get(key));
-			}
-			
-			// Print out this state's neighbors
-			for (int jj = 0; jj < neighbors.size(); jj++){
-				System.out.println(neighbors.get(jj).toString());
 			}
 			
 			// Place this state's neighbors' counties and calculated distance into NearestCounties hashmap
@@ -143,75 +137,56 @@ public class TesterClass {
 					
 					double distance = current_county.calculateDistance(longitude, latitude);				// Calculate distance from this county
 					String stateAndCounty = neighborAbbrv + " " + current_county.getName();					// 
-					NearestCounties.put(stateAndCounty, distance);								// Add county to hashmap<string, double> [key: state and county name, value: distance]
+					NearestCounties.put(stateAndCounty, distance);											// Add county to hashmap<string, double> [key: state and county name, value: distance]
 				}
-				
-				//System.out.println(neighbors.get(jj).toString());
 			}
-			
 		}
 		
 		
 		// Iterates through NearestCounties list
 		int k = 10;
-		ArrayList TopKCounties = new ArrayList();
-		ArrayList TopKDistances = new ArrayList();
+		ArrayList<String> TopKCountyNames = new ArrayList<String>();
+		ArrayList<Double> TopKCountyDistances = new ArrayList<Double>();
 		HashMap<String, Double> TopK = new HashMap<String, Double>();
-		double minDistance = 0;
-		String minDistanceKey = "";
+		double minDistance = 0;												
+		String minDistanceKey = "";											// Represents the county's name (w/ state info)
 		for (int ii = 0; ii < k; ii++){
 			
 	        for (Object key: NearestCounties.keySet()) {
 	        	
 	        	if (minDistance == 0){
-	        		minDistance = NearestCounties.get(key);		// Initialize minimum distance tracker if not set
-	        		minDistanceKey = key.toString();			// Initialize minimum distance county name if not set
+	        		minDistance = NearestCounties.get(key);					// Initialize minimum distance tracker if not set
+	        		minDistanceKey = key.toString();						// Initialize minimum distance county name if not set
 	        	}
 	        	
 	        	if (NearestCounties.get(key) < minDistance){
 	        		minDistance = NearestCounties.get(key);
 	        		minDistanceKey = key.toString();
 	        	}
-	            //System.out.println("County name: " + key + ", Distance: " + NearestCounties.get(key));
-//	            NearestCounties.remove(key);
 	        }
-	        TopKCounties.add(minDistanceKey);
-	        TopKDistances.add(minDistance);
-			NearestCounties.put(minDistanceKey, minDistance);
+	        
+	        // Place in top K results
+	        TopKCountyNames.add(minDistanceKey);
+	        TopKCountyDistances.add(minDistance);
+	        //TopK.put(minDistanceKey, minDistance);
+	        
+	        // Remove from main list (so we don't query it again)
 	        NearestCounties.remove(minDistanceKey);
+	        
+	        // Reset minimums
 	        minDistance = 0;
 			minDistanceKey = "";
 		}
 		
-		for (int ii = 0; ii < TopKCounties.size(); ii++){
-			System.out.println(TopKCounties.get(ii).toString() + ": " + TopKDistances.get(ii).toString());
+		for (Object key: TopK.keySet()) System.out.println(key.toString() + ": " + TopK.get(key));
+		
+		System.out.println("\nSorted order: ");
+		for (int ii = 0; ii < k; ii++){
+			System.out.println(TopKCountyNames.get(ii).toString() + ": " + TopKCountyDistances.get(ii).toString());
 		}
-        
-		// Print out all county info
-		/*for (RTreeNode_GlobalScale current_county : Counties){
-			current_county.printStats();
-		}*/
-		
-		
-        
-		// Iterate through list of nodes (states) containing point
-		/*for (int ii = 0; ii < nodesContainingPoint.size(); ii++){
-			
-			String stateAbbrv = nodesContainingPoint.get(ii).getName();							// Get name of state (abbreviation)
-			for (Object current_state : mapData_States.keySet()) {								// Iterate through all states
-				
-				if (current_state.toString().equals(stateAbbrv)){								// Find matching state
-					System.out.println(current_state);											// Prints out state if matches
-					break;
-				}
-			}
-		}*/
         	
-		
-        //stateNode.setName(current_state.toString());										// Add state's name to node
-        //HashMap state_value = (HashMap) mapData.get(current_state);						// Get internal state hashmap (counties and their dimensions)
-            
 		/*
+		// Keep for reference on how to iterate through some levels of modified RTreeNode
 		for (Object stateChild: Root.getChildren()){
 			stateChild = (RTreeNode_GlobalScale) stateChild;
 			if (!((RTreeNode_GlobalScale) stateChild).getName().equals("NY")) continue;
