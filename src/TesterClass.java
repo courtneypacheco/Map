@@ -110,11 +110,6 @@ public class TesterClass {
 			
 			for (RTreeNode_GlobalScale current_county : currentStateNode.getChildren()) {		// Iterate through this state's counties
 				
-				//if (current_county.containsPoint(longitude, latitude)){						// Check if point is directly in county
-					//Counties.add(current_county);												// If it is, add county to list
-				//}
-				//current_county.printStats();													// Prints
-				
 				double distance = current_county.calculateDistance(longitude, latitude);		// Calculate distance from this county
 				String stateAndCounty = stateAbbrv + " " + current_county.getName();
 				NearestCounties.put(stateAndCounty, distance);						// Add county to hashmap<string, double> [key: state and county name, value: distance]
