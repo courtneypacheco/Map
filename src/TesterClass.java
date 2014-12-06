@@ -72,8 +72,8 @@ public class TesterClass {
 		// Find the state(s) the user-input point is in or nearby
 		double longitude = 0;
 		double latitude = 0;
-		latitude = 40.58892;
-		longitude = -74.42413;
+		latitude = 42.4900;
+		longitude = -71.3900;
 		
 		ArrayList<RTreeNode_GlobalScale> nodesContainingPoint;
 		// Some testing points
