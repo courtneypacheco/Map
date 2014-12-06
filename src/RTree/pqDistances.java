@@ -21,43 +21,42 @@ public class pqDistances
        @param longitude = origin point (y)
     */
     
-    public pqDistances(HashMap states, int size, String state, double latitude, double longitude){
+    public pqDistances (HashMap states, int size, String state, double latitude, double longitude, int k){
     	this.comparator = new pqComparator();
         this.queue = new PriorityQueue<Double>(size, this.comparator);
         this.distance_mapping = new HashMap<Double,String>();
         this.size = size;
 
          //Find state in hashmap
-         HashMap<String, ArrayList> Counties = (HashMap)states.get(state);
-         String county_name;
-         ArrayList<Double> county_temp; //current county in the for loop
-         double[] center_point;
-         double distance;
+        HashMap<String, ArrayList> Counties = (HashMap)states.get(state);
+        String county_name;
+        ArrayList<Double> county_temp; //current county in the for loop
+        double[] center_point;
+        double distance;
 
-         int count = 0;
-         for (Object county : Counties.keySet()){
-              county_name = (String)county;
-              county_temp = (ArrayList)Counties.get(county_name); //the ArrayList for the current county (contains MBR data)
-              
-              //Find center point of the county
-              center_point = getCenter(county_temp.get(0),county_temp.get(1),county_temp.get(2),county_temp.get(3));
-
-              //Calculate distance
-              distance = calculateDistance(center_point, longitude, latitude);
-
-              //Insert into the queue
-              //addDistanceToQueue(distance);
-              queue.add(distance);
-
-              //Insert into hashmap to create a mapping between "queue" and "Counties"
-              distance_mapping.put(distance,county_name);
-              count++;
-         }
-
+        int count = 0;
+        for (Object county : Counties.keySet()){
+            county_name = (String)county;
+            county_temp = (ArrayList)Counties.get(county_name); //the ArrayList for the current county (contains MBR data)
+            
+            //Find center point of the county
+            center_point = getCenter(county_temp.get(0),county_temp.get(1),county_temp.get(2),county_temp.get(3));
+            
+            //Calculate distance
+            distance = calculateDistance(center_point, longitude, latitude);
+            
+            //Insert into the queue
+            //addDistanceToQueue(distance);
+            queue.add(distance);
+            
+            //Insert into hashmap to create a mapping between "queue" and "Counties"
+            distance_mapping.put(distance,county_name);
+            count++;
+        }
     }
 
-    //Loads map data from 'latest_map.dat'
-    private void loadMap() throws IOException, ClassNotFoundException{
+    // Loads map data from 'latest_map.dat'
+    private void loadMap() throws IOException, ClassNotFoundException {
          File file = new File("latest_map.dat");
          FileInputStream f = new FileInputStream(file);
          ObjectInputStream s = new ObjectInputStream(f);
@@ -67,7 +66,7 @@ public class pqDistances
          this.States = fileObj2;
     }
 
-    //Get coordinates for the center of the county
+    // Get coordinates for the center of the county
     public double[] getCenter(double x1, double y1, double x2, double y2){
         double mid_x = (x1 + x2) / 2;
         double mid_y = (y1 + y2) / 2;
@@ -91,7 +90,6 @@ public class pqDistances
     //Print top 'k' counties from the queue
     public void printQueue(int k){
          //PriorityQueue<Double> temp_queue = new PriorityQueue<Double>(size, comparator);
-
          double d;
          String county_name;
          int counter = 0;
@@ -101,7 +99,7 @@ public class pqDistances
               //Now find the distance 'd' in the hashmap to figure out which county 'distance' corresponds to
               county_name = (String)distance_mapping.get(d);
 
-              System.out.println("County: " + county_name + "; distance: " + d);
+              System.out.println("County: " + county_name + "; distance: " + String.format("%.3g", d) + " km");
               counter++;
          }
     }

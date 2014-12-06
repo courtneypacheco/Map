@@ -1,5 +1,10 @@
 package CommandLine;
 
+import java.io.IOException;
+import java.util.HashMap;
+
+import LoadData.MapData;
+import RTree.pqDistances;
 import Rectangle.RegionRectangle;
 
 /* Command-line Interface
@@ -29,28 +34,40 @@ public class CommandLine {
 		}
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		int argsLen = args.length;
 		
-        if (argsLen != 3) {
-        	errorCheck(1);
-        } else {
-        	Double x = Double.parseDouble(args[0]);
-        	Double y = Double.parseDouble(args[1]);
-    		int k = Integer.parseInt(args[2]);
+        	if (argsLen != 3) {
+        		errorCheck(1);
+        	} else {
+        		Double x = Double.parseDouble(args[0]);
+        		Double y = Double.parseDouble(args[1]);
+    			int k = Integer.parseInt(args[2]);
 
-    		/* If treating user-input coordinates as its own rectangle object
-			double x1 = Double.parseDouble(x);
-    		double x2 = Double.parseDouble(x);
-    		double y1 = Double.parseDouble(y);
-    		double y2 = Double.parseDouble(y);
-    		RegionRectangle myRectangle = new RegionRectangle(x1, x2, y1, y2);
-    		System.out.println(myRectangle.getHeight());
-    		System.out.println(myRectangle.getWidth());
-    		*/
+    			// Load map data
+    			MapData mapData_States = new MapData("src\\NationalFile_StateProvinceDecimalLatLong.txt");
     		
-    		System.out.printf("Searching the %d nearest counties from point (%f, %f)...\n", k, x, y);
-    		System.exit(0);
-        }
-    }
+    		
+    		ArrayList<RTreeNode_GlobalScale> nodesContainingPoint;
+		nodesContainingPoint = Root.findNodesContainingPoint(y, x);
+		String stateAbbrv = null;
+		for (int ii = 0; ii < nodesContainingPoint.size(); ii++){
+			
+			RTreeNode_GlobalScale currentStateNode = nodesContainingPoint.get(ii);				// Get current state node
+			stateAbbrv = currentStateNode.getName();										// Get name of state (abbreviation)
+			
+			if (!stateAbbrv.equals("Root: United States")) continue;	
+		}
+		
+		// Display resulting nodes that point is in or nearby
+		for (int ii = 0; ii < nodesContainingPoint.size(); ii++){
+			System.out.println("From recursive function. Nodes containing test point: " + nodesContainingPoint.get(ii).getName());
+		}
+    		
+    			// Try priority queue
+    			//pqDistances pq = new pqDistances(mapData_States.States, 100, "CO", -104.98, 39.7516667);
+    			pqDistances pq = new pqDistances(mapData_States.States, 100, stateAbbrv, y, x, k); // longitude (y), latitude (x)
+    			pq.printQueue(k);
+        	}
+	}
 }
