@@ -238,30 +238,28 @@ public class TesterClass {
 	 */
 	public static RTreeNode_GlobalScale CreateRTree(HashMap<String, HashMap<String, ArrayList>> mapData){
 		
-		RTreeNode_GlobalScale rootNode = new RTreeNode_GlobalScale();			// Root of tree
+		RTreeNode_GlobalScale rootNode = new RTreeNode_GlobalScale();							// Root of tree
 		
 		//This prints out all the states. Just for debugging purposes.
         for (Object current_state : mapData.keySet()) {											// Iterate through all states
         	
-        	// IMPORTANT: Uncomment when selecting to print out a specific state (for testing purposes only)
+        	// Uncomment when selecting to print out a specific state (for testing purposes only)
         	//if (!current_state.toString().equals("MH")) continue;
         	
         	RTreeNode_GlobalScale stateNode = new RTreeNode_GlobalScale();						// Initialize current state's nodes
-            //System.out.println(current_state);													// Prints out state
+            //System.out.println(current_state);												// Prints out state
             stateNode.setName(current_state.toString());										// Add state's name to node
             
             HashMap state_value = (HashMap) mapData.get(current_state);							// Get internal state hashmap (counties and their dimensions)
             
             for (Object current_county : state_value.keySet()){									// Iterate through all counties in state
             	
-                //System.out.print("   - " + current_county);										// Prints out county belonging to [this] state
                 ArrayList county_dimensions = (ArrayList) state_value.get(current_county);		// Get county's list of rectangular dimensions.
-                //System.out.print(" " + county_dimensions + "\n");								// Print out county's dimensions (points form)
                 
                 // Store coordinates. Note ArrayList points order: [x1, y1, x2, y2]
                 Double x1, x2, y1, y2;
                 
-                if (county_dimensions.size() != 4) continue;		// If ArrayList does not have 4 points, skip county
+                if (county_dimensions.size() != 4) continue;	// If ArrayList does not have 4 points, skip county
                 
                 y2 = (Double) county_dimensions.get(0);			// Get y2 = max latitude
                 x1 = (Double) county_dimensions.get(1);			// Get x1 = min longitude 

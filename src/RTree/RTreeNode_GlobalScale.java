@@ -67,6 +67,7 @@ public class RTreeNode_GlobalScale {
 	public void setY1(double y){
 		this._y1 = y;
 		this.updateHeight();
+		this.getCenter();
 	}
 	
 	// Y2
@@ -76,6 +77,7 @@ public class RTreeNode_GlobalScale {
 	public void setY2(double y){
 		this._y2 = y;
 		this.updateHeight();
+		this.getCenter();
 	}
 	
 	// Width
@@ -202,6 +204,7 @@ public class RTreeNode_GlobalScale {
 			this._y2 = y2;
 		}*/
 		
+		// Update center
 		this.getCenter();
 		
 		// Update width
@@ -214,11 +217,17 @@ public class RTreeNode_GlobalScale {
 		this._Children = new ArrayList<RTreeNode_GlobalScale>();
 	}
 	
+	/**
+	 * Updates width of rectangular region of node
+	 */
 	private void updateWidth(){
 		this._width = this._x2 - this._x1;
 		if (this._width < 0) this._width = this._width * -1;
 	}
 	
+	/**
+	 * Updates height of rectangular region of node
+	 */
 	private void updateHeight(){
 		this._height = this._y2 - this._y1;
 		if (this._height < 0) this._height = this._height * -1;
@@ -457,7 +466,8 @@ public class RTreeNode_GlobalScale {
 		}*/
 		
 		
-		// Update width and height
+		// Update center, width and height
+		this.getCenter();
 		this.updateWidth();
 		this.updateHeight();
 	}
@@ -476,20 +486,6 @@ public class RTreeNode_GlobalScale {
 		System.out.println("center longitude: " + this._center[0]);
 		System.out.println("center latitude: " + this._center[1]);
 	}
-	
-	/***
-	 * Expands this node's rectangular region by adjusting its bounds, 
-	 * this is done in order to incorporate bounds of the second (input) node
-	 * @param node	<code>Rectangle</code>
-	 */
-	/*
-	public void expandRegion(Rectangle node){
-		Rectangle thisNode = new Rectangle();
-		thisNode.setRect(_x1, _y1, _width, _height);
-		
-		Rectangle inputNode = new Rectangle();
-		inputNode.setRect(node.getX1(), node.getY1(), node.getWidth(), node.getHeight());
-	}*/
 	
 	//#endregion Methods ------------------------------------------
 }
