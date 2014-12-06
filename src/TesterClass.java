@@ -247,7 +247,6 @@ public class TesterClass {
         	//if (!current_state.toString().equals("MH")) continue;
         	
         	RTreeNode_GlobalScale stateNode = new RTreeNode_GlobalScale();						// Initialize current state's nodes
-            //System.out.println(current_state);												// Prints out state
             stateNode.setName(current_state.toString());										// Add state's name to node
             
             HashMap state_value = (HashMap) mapData.get(current_state);							// Get internal state hashmap (counties and their dimensions)
