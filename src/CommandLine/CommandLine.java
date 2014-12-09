@@ -67,11 +67,46 @@ public class CommandLine {
     			ArrayList<RTreeNode_GlobalScale> nodesContainingPoint;
     			nodesContainingPoint = Root.findNodesContainingPoint(x, y);
     			String stateAbbrv = null;
+    			
+    			pqDistances pq = new pqDistances();
+    			
     			for (int ii = 0; ii < nodesContainingPoint.size(); ii++) {
     				// Get current state node
-    				RTreeNode_GlobalScale currentStateNode = nodesContainingPoint.get(ii); 
-    				//if (stateAbbrv.equals("Root: United States")) continue;
-    				stateAbbrv = currentStateNode.getName(); // Get name of state (abbreviation)	
+    				RTreeNode_GlobalScale currentStateNode = nodesContainingPoint.get(ii);
+    				stateAbbrv = currentStateNode.getName();										// Get name of state (abbreviation)
+    				
+    				if (stateAbbrv.equals("Root: United States")) continue;
+    				stateAbbrv = currentStateNode.getName(); // Get name of state (abbreviation)
+    				
+    				// Add distance calculations to PQ for this state
+        			//pq = new pqDistances(mapData_States, 1000, stateAbbrv, x, y);
+        			pq.addAdditionalDistances(mapData_States, 1000, stateAbbrv, x, y);
+        			
+        			//  -------------------- Find this State's State Neighbors and their distances --------------------- 
+        			
+        			ArrayList<String> neighbors = new ArrayList<String>();								// Array to keep track this state's neighbors
+        			
+        			// Iterate through the State Neighbors list to find this state's neighbors
+        			Set<String> keys = StateNeighbors.stateNeighbors.keySet();
+        			for (String key: keys) {
+        				
+        				// Skip if abbreviation we're looking for doesn't match with this entry
+        				if (!key.equals(stateAbbrv)) continue;
+        				
+        				// Found the state in the State Neighbors list! Now place its neighbors in the neighbors array for later use
+        				neighbors.addAll(StateNeighbors.stateNeighbors.get(key));
+        				System.out.println("Querying state and its neighbors... " + key + ": " + StateNeighbors.stateNeighbors.get(key));
+        				
+        			}
+        			
+        			// Place this state's neighbors' counties and calculated distance into NearestCounties hashmap
+        			for (int jj = 0; jj < neighbors.size(); jj++){
+        				
+        				String neighborAbbrv = neighbors.get(jj).toString();							// Get current state neighbor's name
+        				pq.addAdditionalDistances(mapData_States, 1000, neighborAbbrv, x, y);
+        			}
+        			
+        			
     				//System.out.println(nodesContainingPoint.get(ii));
     			}
     			
@@ -81,32 +116,7 @@ public class CommandLine {
     			}
     		
     			// Add distance calculations to PQ for this state
-    			pqDistances pq = new pqDistances(mapData_States, 500, stateAbbrv, x, y);
-    			
-    			
-    			//  -------------------- Find this State's State Neighbors and their distances --------------------- 
-    			
-    			ArrayList<String> neighbors = new ArrayList<String>();								// Array to keep track this state's neighbors
-    			
-    			// Iterate through the State Neighbors list to find this state's neighbors
-    			Set<String> keys = StateNeighbors.stateNeighbors.keySet();
-    			for (String key: keys) {
-    				
-    				// Skip if abbreviation we're looking for doesn't match with this entry
-    				if (!key.equals(stateAbbrv)) continue;
-    				
-    				// Found the state in the State Neighbors list! Now place its neighbors in the neighbors array for later use
-    				neighbors.addAll(StateNeighbors.stateNeighbors.get(key));
-    				System.out.println("Querying state and its neighbors... " + key + ": " + StateNeighbors.stateNeighbors.get(key));
-    				
-    			}
-    			
-    			// Place this state's neighbors' counties and calculated distance into NearestCounties hashmap
-    			for (int jj = 0; jj < neighbors.size(); jj++){
-    				
-    				String neighborAbbrv = neighbors.get(jj).toString();							// Get current state neighbor's name
-    				pq.addAdditionalDistances(mapData_States, 500, neighborAbbrv, x, y);
-    			}
+    			//pq = new pqDistances(mapData_States, 500, stateAbbrv, x, y);
     			
     			
     			// Try priority queue

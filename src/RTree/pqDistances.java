@@ -21,8 +21,15 @@ public class pqDistances
        @param longitude = origin point (y)
     */
     
-    public pqDistances (HashMap states, int size, String state, double latitude, double longitude){
+    public pqDistances(){
+    	this.size = 100;
     	this.comparator = new pqComparator();
+        this.queue = new PriorityQueue<Double>(size, this.comparator);
+        this.distance_mapping = new HashMap<Double,String>();
+    }
+    
+    public pqDistances (HashMap states, int size, String state, double latitude, double longitude){
+    	/*this.comparator = new pqComparator();
         this.queue = new PriorityQueue<Double>(size, this.comparator);
         this.distance_mapping = new HashMap<Double,String>();
         this.size = size;
@@ -51,7 +58,7 @@ public class pqDistances
             //Insert into hashmap to create a mapping between "queue" and "Counties"
             distance_mapping.put(distance, state + " " + county_name);
 
-        }
+        }*/
     }
     
     public void addAdditionalDistances(HashMap states, int size, String state, double latitude, double longitude){
