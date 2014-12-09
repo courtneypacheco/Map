@@ -21,20 +21,19 @@ public class pqDistances
        @param longitude = origin point (y)
     */
     
-    public pqDistances (HashMap states, int size, String state, double latitude, double longitude, int k){
+    public pqDistances (HashMap states, int size, String state, double latitude, double longitude){
     	this.comparator = new pqComparator();
         this.queue = new PriorityQueue<Double>(size, this.comparator);
         this.distance_mapping = new HashMap<Double,String>();
         this.size = size;
 
-         //Find state in hashmap
+        //Find state in hashmap
         HashMap<String, ArrayList> Counties = (HashMap)states.get(state);
         String county_name;
         ArrayList<Double> county_temp; //current county in the for loop
         double[] center_point;
         double distance;
 
-        int count = 0;
         for (Object county : Counties.keySet()){
             county_name = (String)county;
             county_temp = (ArrayList)Counties.get(county_name); //the ArrayList for the current county (contains MBR data)
@@ -50,8 +49,36 @@ public class pqDistances
             queue.add(distance);
             
             //Insert into hashmap to create a mapping between "queue" and "Counties"
-            distance_mapping.put(distance,county_name);
-            count++;
+            distance_mapping.put(distance, state + " " + county_name);
+
+        }
+    }
+    
+    public void addAdditionalDistances(HashMap states, int size, String state, double latitude, double longitude){
+    	
+    	//Find state in hashmap
+        HashMap<String, ArrayList> Counties = (HashMap)states.get(state);
+        String county_name;
+        ArrayList<Double> county_temp; //current county in the for loop
+        double[] center_point;
+        double distance;
+
+        for (Object county : Counties.keySet()){
+            county_name = (String)county;
+            county_temp = (ArrayList)Counties.get(county_name); //the ArrayList for the current county (contains MBR data)
+            
+            //Find center point of the county
+            center_point = getCenter(county_temp.get(0),county_temp.get(1),county_temp.get(2),county_temp.get(3));
+            
+            //Calculate distance
+            distance = calculateDistance(center_point, longitude, latitude);
+            
+            //Insert into the queue
+            //addDistanceToQueue(distance);
+            queue.add(distance);
+            
+            //Insert into hashmap to create a mapping between "queue" and "Counties"
+            distance_mapping.put(distance, state + " " + county_name);
         }
     }
 

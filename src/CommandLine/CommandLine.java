@@ -3,11 +3,13 @@ package CommandLine;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import LoadData.MapData;
 import RTree.RTreeNode_GlobalScale;
 import RTree.pqDistances;
 import Rectangle.RegionRectangle;
+import StateNeighbors.StateNeighbors;
 
 /* Command-line Interface
  * To test on Eclipse:
@@ -49,12 +51,19 @@ public class CommandLine {
     			x = (long) (x * 10000) / 10000.0;
     			y = (long) (y * 10000) / 10000.0;
     			
+    			//  ---------------------- Load Data: Counties and States and State Neighbors ---------------------- 
+    			
     			// Load map data
     			HashMap mapData_States = LoadMapData("src\\NationalFile_StateProvinceDecimalLatLong.txt");
     		
+    			// Load state neighbors
+    			StateNeighbors stateNeighbors = LoadStateNeighborsList();
+    			
     		
-    			// Create RTree(ish) data structure
+    			//  --------------------------- Create "RTree" Search tree data structure -------------------------- 
     			RTreeNode_GlobalScale Root = CreateRTree(mapData_States);
+    			
+    			//  -------------------------------- Find State that the point is in ------------------------------- 
     			ArrayList<RTreeNode_GlobalScale> nodesContainingPoint;
     			nodesContainingPoint = Root.findNodesContainingPoint(x, y);
     			String stateAbbrv = null;
@@ -71,68 +80,108 @@ public class CommandLine {
     				System.out.println("From recursive function. Nodes containing test point: " + nodesContainingPoint.get(ii).getName());
     			}
     		
-	    			// Try priority queue
-	    			//pqDistances pq = new pqDistances(mapData_States.States, 100, "CO", -104.98, 39.7516667);
-	    			pqDistances pq = new pqDistances(mapData_States, 100, stateAbbrv, x, y, k);
-	    			pq.printQueue(k);
+    			// Add distance calculations to PQ for this state
+    			pqDistances pq = new pqDistances(mapData_States, 500, stateAbbrv, x, y);
+    			
+    			
+    			//  -------------------- Find this State's State Neighbors and their distances --------------------- 
+    			
+    			ArrayList<String> neighbors = new ArrayList<String>();								// Array to keep track this state's neighbors
+    			
+    			// Iterate through the State Neighbors list to find this state's neighbors
+    			Set<String> keys = StateNeighbors.stateNeighbors.keySet();
+    			for (String key: keys) {
+    				
+    				// Skip if abbreviation we're looking for doesn't match with this entry
+    				if (!key.equals(stateAbbrv)) continue;
+    				
+    				// Found the state in the State Neighbors list! Now place its neighbors in the neighbors array for later use
+    				neighbors.addAll(StateNeighbors.stateNeighbors.get(key));
+    				System.out.println("Querying state and its neighbors... " + key + ": " + StateNeighbors.stateNeighbors.get(key));
+    				
+    			}
+    			
+    			// Place this state's neighbors' counties and calculated distance into NearestCounties hashmap
+    			for (int jj = 0; jj < neighbors.size(); jj++){
+    				
+    				String neighborAbbrv = neighbors.get(jj).toString();							// Get current state neighbor's name
+    				pq = new pqDistances(mapData_States, 500, neighborAbbrv, x, y);
+    			}
+    			
+    			
+    			// Try priority queue
+    			//pqDistances pq = new pqDistances(mapData_States.States, 100, "CO", -104.98, 39.7516667);
+    			pq.printQueue(k);
     		}
         }
+	
+	/**
+	 * Loads states' neighbors
+	 * @return
+	 * @throws IOException
+	 */
+	public static StateNeighbors LoadStateNeighborsList() throws IOException{
+		System.out.println("Loading State Neighbors data...");
+		StateNeighbors stateNeighbors = new StateNeighbors();
+		System.out.println("Loading State Neighbors completed...");
+		return stateNeighbors;
+	}
+	
+	/***
+	 * Loads input map data for application
+	 * @throws IOException
+	 */
+	public static HashMap LoadMapData(String filename) throws IOException{
+		System.out.println("Loading Map Data...");
+		MapData mapData = new MapData(filename);
+		System.out.println("Loading Map Data completed...");
+		return mapData.getStates();
+	}
+	
+	public static RTreeNode_GlobalScale CreateRTree(HashMap<String, HashMap<String, ArrayList>> mapData){
+		
+		RTreeNode_GlobalScale rootNode = new RTreeNode_GlobalScale();							// Root of tree
+		
+		//This prints out all the states. Just for debugging purposes.
+        for (Object current_state : mapData.keySet()) {											// Iterate through all states
         	
-        	/***
-        	 * Loads input map data for application
-        	 * @throws IOException
-        	 */
-        	public static HashMap LoadMapData(String filename) throws IOException{
-        		System.out.println("Loading Map Data...");
-        		MapData mapData = new MapData(filename);
-        		System.out.println("Loading Map Data completed...");
-        		return mapData.getStates();
-        	}
+        	// Uncomment when selecting to print out a specific state (for testing purposes only)
+        	//if (!current_state.toString().equals("MH")) continue;
         	
-        	public static RTreeNode_GlobalScale CreateRTree(HashMap<String, HashMap<String, ArrayList>> mapData){
-        		
-        		RTreeNode_GlobalScale rootNode = new RTreeNode_GlobalScale();							// Root of tree
-        		
-        		//This prints out all the states. Just for debugging purposes.
-                for (Object current_state : mapData.keySet()) {											// Iterate through all states
-                	
-                	// Uncomment when selecting to print out a specific state (for testing purposes only)
-                	//if (!current_state.toString().equals("MH")) continue;
-                	
-                	RTreeNode_GlobalScale stateNode = new RTreeNode_GlobalScale();						// Initialize current state's nodes
-                    stateNode.setName(current_state.toString());										// Add state's name to node
-                    
-                    HashMap state_value = (HashMap) mapData.get(current_state);							// Get internal state hashmap (counties and their dimensions)
-                    
-                    for (Object current_county : state_value.keySet()){									// Iterate through all counties in state
-                    	
-                        ArrayList county_dimensions = (ArrayList) state_value.get(current_county);		// Get county's list of rectangular dimensions.
-                        
-                        // Store coordinates. Note ArrayList points order: [x1, y1, x2, y2]
-                        Double x1, x2, y1, y2;
-                        
-                        if (county_dimensions.size() != 4) continue;	// If ArrayList does not have 4 points, skip county
-                        
-                        y2 = (Double) county_dimensions.get(0);			// Get y2 = max latitude
-                        x1 = (Double) county_dimensions.get(1);			// Get x1 = min longitude 
-                        y1 = (Double) county_dimensions.get(2);			// Get y1 = min latitude
-                        x2 = (Double) county_dimensions.get(3);			// Get x2 = max longitude
-                        
-                        // Create county node: name, x1, x2, y1, y2
-                        RTreeNode_GlobalScale countyNode = new RTreeNode_GlobalScale(current_county.toString(), x1, x2, y1, y2);
-                        
-                        // Add county to state
-                        stateNode.addChild(countyNode);
-                    }
-                    
-                    // Add state to root node
-                    rootNode.addChild(stateNode);
-                }
+        	RTreeNode_GlobalScale stateNode = new RTreeNode_GlobalScale();						// Initialize current state's nodes
+            stateNode.setName(current_state.toString());										// Add state's name to node
+            
+            HashMap state_value = (HashMap) mapData.get(current_state);							// Get internal state hashmap (counties and their dimensions)
+            
+            for (Object current_county : state_value.keySet()){									// Iterate through all counties in state
+            	
+                ArrayList county_dimensions = (ArrayList) state_value.get(current_county);		// Get county's list of rectangular dimensions.
                 
-                rootNode.setName("Root: United States");
-        		
-        		return rootNode;
-        	}
+                // Store coordinates. Note ArrayList points order: [x1, y1, x2, y2]
+                Double x1, x2, y1, y2;
+                
+                if (county_dimensions.size() != 4) continue;	// If ArrayList does not have 4 points, skip county
+                
+                y2 = (Double) county_dimensions.get(0);			// Get y2 = max latitude
+                x1 = (Double) county_dimensions.get(1);			// Get x1 = min longitude 
+                y1 = (Double) county_dimensions.get(2);			// Get y1 = min latitude
+                x2 = (Double) county_dimensions.get(3);			// Get x2 = max longitude
+                
+                // Create county node: name, x1, x2, y1, y2
+                RTreeNode_GlobalScale countyNode = new RTreeNode_GlobalScale(current_county.toString(), x1, x2, y1, y2);
+                
+                // Add county to state
+                stateNode.addChild(countyNode);
+            }
+            
+            // Add state to root node
+            rootNode.addChild(stateNode);
+        }
+        
+        rootNode.setName("Root: United States");
+		
+		return rootNode;
+	}
         	
         	
 }
