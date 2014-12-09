@@ -105,7 +105,7 @@ public class CommandLine {
     			for (int jj = 0; jj < neighbors.size(); jj++){
     				
     				String neighborAbbrv = neighbors.get(jj).toString();							// Get current state neighbor's name
-    				pq = new pqDistances(mapData_States, 500, neighborAbbrv, x, y);
+    				pq.addAdditionalDistances(mapData_States, 500, neighborAbbrv, x, y);
     			}
     			
     			
