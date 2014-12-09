@@ -73,14 +73,12 @@ public class CommandLine {
     			for (int ii = 0; ii < nodesContainingPoint.size(); ii++) {
     				// Get current state node
     				RTreeNode_GlobalScale currentStateNode = nodesContainingPoint.get(ii);
-    				stateAbbrv = currentStateNode.getName();										// Get name of state (abbreviation)
+    				stateAbbrv = currentStateNode.getName();											// Get name of state (abbreviation)
     				
     				if (stateAbbrv.equals("Root: United States")) continue;
-    				stateAbbrv = currentStateNode.getName(); // Get name of state (abbreviation)
     				
     				// Add distance calculations to PQ for this state
-        			//pq = new pqDistances(mapData_States, 1000, stateAbbrv, x, y);
-        			pq.addAdditionalDistances(mapData_States, 1000, stateAbbrv, x, y);
+        			pq.addAdditionalDistances(mapData_States, 10000, stateAbbrv, x, y);
         			
         			//  -------------------- Find this State's State Neighbors and their distances --------------------- 
         			
@@ -103,24 +101,16 @@ public class CommandLine {
         			for (int jj = 0; jj < neighbors.size(); jj++){
         				
         				String neighborAbbrv = neighbors.get(jj).toString();							// Get current state neighbor's name
-        				pq.addAdditionalDistances(mapData_States, 1000, neighborAbbrv, x, y);
+        				pq.addAdditionalDistances(mapData_States, 10000, neighborAbbrv, x, y);
         			}
-        			
-        			
-    				//System.out.println(nodesContainingPoint.get(ii));
     			}
     			
     			// Display resulting nodes that contain the original coordinates or nearby
-    			for (int ii = 0; ii < nodesContainingPoint.size(); ii++) {
+    			/*for (int ii = 0; ii < nodesContainingPoint.size(); ii++) {
     				System.out.println("From recursive function. Nodes containing test point: " + nodesContainingPoint.get(ii).getName());
-    			}
-    		
-    			// Add distance calculations to PQ for this state
-    			//pq = new pqDistances(mapData_States, 500, stateAbbrv, x, y);
-    			
-    			
-    			// Try priority queue
-    			//pqDistances pq = new pqDistances(mapData_States.States, 100, "CO", -104.98, 39.7516667);
+    			}*/
+
+    			// Print results
     			pq.printQueue(k);
     		}
         }

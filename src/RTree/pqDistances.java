@@ -22,7 +22,7 @@ public class pqDistances
     */
     
     public pqDistances(){
-    	this.size = 100;
+    	this.size = 10000;
     	this.comparator = new pqComparator();
         this.queue = new PriorityQueue<Double>(size, this.comparator);
         this.distance_mapping = new HashMap<Double,String>();
