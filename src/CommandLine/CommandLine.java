@@ -42,10 +42,13 @@ public class CommandLine {
         	if (argsLen != 3) {
         		errorCheck(1);
         	} else {
-        		Double x = Double.parseDouble(args[0]);
-        		Double y = Double.parseDouble(args[1]);
+        		Double x = Double.parseDouble(args[1]);
+        		Double y = Double.parseDouble(args[0]);
     			int k = Integer.parseInt(args[2]);
 
+    			x = (long) (x * 10000) / 10000.0;
+    			y = (long) (y * 10000) / 10000.0;
+    			
     			// Load map data
     			HashMap mapData_States = LoadMapData("src\\NationalFile_StateProvinceDecimalLatLong.txt");
     		
