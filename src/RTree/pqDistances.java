@@ -14,15 +14,15 @@ public class pqDistances
     private int size; // Max. size of priority queue
     private HashMap<String, HashMap<String, ArrayList>> States; // key ---> State, value ---> hashmap containing another hashmap of county (key) and the coordinates (value)
 
-    /* Priority Queue structure
-       @param size = size of the priority queue (i.e., max # of values the queue can hold)
-       @param state = state found from Rtree
-       @param latitude = origin point (x)
-       @param longitude = origin point (y)
+    /** Priority Queue structure
+       size = size of the priority queue (i.e., max # of values the queue can hold)
+       state = state found from Rtree
+       latitude = origin point (x)
+       longitude = origin point (y)
     */
     
     public pqDistances(){
-    	this.size = 100;
+    	this.size = 10000;
     	this.comparator = new pqComparator();
         this.queue = new PriorityQueue<Double>(size, this.comparator);
         this.distance_mapping = new HashMap<Double,String>();
