@@ -13,7 +13,8 @@ import java.util.HashMap;
 public class MapData{
     
     protected static String filename;
-    public HashMap<String, HashMap<String, ArrayList>> States = new HashMap<String,HashMap<String,ArrayList>>();
+    public HashMap<String, HashMap<String, ArrayList>> States = new HashMap<String,HashMap<String, ArrayList>>();
+    public HashMap<String, HashMap<String, Integer>> reliability = new HashMap<String, HashMap<String, Integer>>();
     
     public MapData(String filename) throws IOException{
         MapData.filename = filename;
@@ -57,7 +58,7 @@ public class MapData{
                 //Make sure the longitude/latitude is NOT zero. Also, make sure that the county name is not "".
                 if (longitude != 0 && county != null && county.length()!=0){
                     
-                    //Check if the current state has already been added to the hashmap
+                    //Check if the current state has already been added to the hashmap. If not, then execute this 'if' statement
                     if ((this.States == null || this.States.get(state) == null)){
 
                         //This hash map "counties" will be stored in the "State" hashmap
@@ -73,19 +74,42 @@ public class MapData{
 
                         //Add Counties to "States" HashMap
                         this.States.put(state, Counties);
+                        
+                        //Add count to 'reliability' HashMap
+                        HashMap Counties_Count = new HashMap<String, Integer>();
+                        Counties_Count.put(county,1); //initialize count to 1
+                        this.reliability.put(state,Counties_Count);
                     }
                     else {
 
                         //Get the info for the existing state name
                         HashMap county_info = (HashMap)this.States.get(state);
+                        HashMap county_count = (HashMap)this.reliability.get(state);
 
+                        //If the 'States' HashMap contains the current state, but NOT the current county...
                         if (county_info.get(county) == null){
+                            
+                            //Add coordinates to county_info
                             ArrayList coordinates = new ArrayList<Double>();
                             coordinates.add(longitude);
                             coordinates.add(latitude);
                             county_info.put(county, coordinates);
+                            
+                            //Initialize county count to 1
+                            county_count.put(county, 1);
+                            
                         }
                         else{
+                            
+                            //Get the current count from the 'reliability' HashMap
+                        	int current_count = (Integer)reliability.get(state).get(county);
+                            current_count++; //increment current count by 1
+                            
+                            //Now update count
+                            county_count.remove(county);
+                            county_count.put(county,current_count);
+                            
+                            
 
                             //Get the existing coordinates from the hashmap
                             ArrayList existing_coordinates;
@@ -166,6 +190,7 @@ public class MapData{
 
                         //Update
                         this.States.put(state, county_info);
+                        this.reliability.put(state,county_count);
                     }
                 
                 }
@@ -180,17 +205,6 @@ public class MapData{
         
         System.out.println("HashMap created.");
         
-        /*
-        //This prints out all the states. Leave this commented. Just for debugging purposes.
-        for (Object key: this.States.keySet()) {
-            System.out.println(key);
-            HashMap curr_key = (HashMap)this.States.get(key);
-            for (Object val: curr_key.keySet()){
-                System.out.println("   - " + val);
-            }
-        }
-        */
-
     }
     
     private void saveFile() throws FileNotFoundException, IOException{
@@ -204,6 +218,10 @@ public class MapData{
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(this.States);
         oos.close();
+    }
+    
+    public int getCount(String state, String county){
+    	return this.reliability.get(state).get(county);
     }
     
 }
