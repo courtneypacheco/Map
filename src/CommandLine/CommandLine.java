@@ -69,6 +69,7 @@ public class CommandLine {
     			String stateAbbrv = null;
     			
     			pqDistances pq = new pqDistances();
+    			pqDistances pqMajorityVote = new pqDistances();
     			
     			for (int ii = 0; ii < nodesContainingPoint.size(); ii++) {
     				// Get current state node
@@ -79,6 +80,7 @@ public class CommandLine {
     				
     				// Add distance calculations to PQ for this state
         			pq.addAdditionalDistances(mapData_States, 10000, stateAbbrv, x, y);
+        			pqMajorityVote.addAdditionalDistances(mapData_States, 10000, stateAbbrv, x, y);
         			
         			//  -------------------- Find this State's State Neighbors and their distances --------------------- 
         			
@@ -102,6 +104,7 @@ public class CommandLine {
         				
         				String neighborAbbrv = neighbors.get(jj).toString();							// Get current state neighbor's name
         				pq.addAdditionalDistances(mapData_States, 10000, neighborAbbrv, x, y);
+        				pqMajorityVote.addAdditionalDistances(mapData_States, 10000, neighborAbbrv, x, y);
         			}
     			}
     			
@@ -112,6 +115,24 @@ public class CommandLine {
 
     			// Print results
     			pq.printQueue(k);
+    			ArrayList topK = pqMajorityVote.getStateAndCountyName(5);
+    			System.out.println(topK);
+    			
+    			String[] StateCountyStringArray;
+    			int max = 0;
+    			String StateAndCountyWithMostPoints = "";
+    			for (int ii = 0; ii < topK.size(); ii ++){
+    				StateCountyStringArray = ((String) topK.get(ii)).split(" ");
+    				String state = StateCountyStringArray[0];
+    				String county = StateCountyStringArray[1];
+    				//System.out.println(MapData.getCount(state, county));//getCount
+    				if (MapData.getCount(state, county) > max){
+    					max = MapData.getCount(state, county);
+    					StateAndCountyWithMostPoints = state + ", " + county;
+    				}
+    			}
+    			
+    			System.out.println("You are in: " + StateAndCountyWithMostPoints + " with number of points: " + max);
     		}
         }
 	

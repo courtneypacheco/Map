@@ -82,7 +82,8 @@ public class pqDistances
             
             //Insert into the queue
             //addDistanceToQueue(distance);
-            queue.add(distance);
+            if (!queue.contains(distance))
+            	queue.add(distance);
             
             //Insert into hashmap to create a mapping between "queue" and "Counties"
             distance_mapping.put(distance, state + " " + county_name);
@@ -129,7 +130,7 @@ public class pqDistances
          int counter = 0;
          while ((queue.size() != 0) && (counter < k) ){
               d = queue.remove();
-             
+              
               //Now find the distance 'd' in the hashmap to figure out which county 'distance' corresponds to
               county_name = (String)distance_mapping.get(d);
 
@@ -137,4 +138,25 @@ public class pqDistances
               counter++;
          }
     }
+    
+    /**
+     * Returns an arraylist of top 'k' counties and their count
+     * @param k	count
+     */
+    public ArrayList getStateAndCountyName(int k){
+        //PriorityQueue<Double> temp_queue = new PriorityQueue<Double>(size, comparator);
+        double d;
+        String county_name;
+        int counter = 0;
+        ArrayList topK = new ArrayList();
+        while ((queue.size() != 0) && (counter < k) ){
+             d = queue.remove();
+            
+             //Now find the distance 'd' in the hashmap to figure out which county 'distance' corresponds to
+             county_name = (String)distance_mapping.get(d);
+             topK.add(county_name);
+             counter++;
+        }
+        return topK;
+   }
 }

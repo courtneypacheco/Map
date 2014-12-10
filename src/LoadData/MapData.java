@@ -14,7 +14,7 @@ public class MapData{
     
     protected static String filename;
     public HashMap<String, HashMap<String, ArrayList>> States = new HashMap<String,HashMap<String, ArrayList>>();
-    public HashMap<String, HashMap<String, Integer>> reliability = new HashMap<String, HashMap<String, Integer>>();
+    public static HashMap<String, HashMap<String, Integer>> reliability = new HashMap<String, HashMap<String, Integer>>();
     
     public MapData(String filename) throws IOException{
         MapData.filename = filename;
@@ -78,11 +78,9 @@ public class MapData{
                         //Add count to 'reliability' HashMap
                         HashMap Counties_Count = new HashMap<String, Integer>();
                         Counties_Count.put(county,1); //initialize count to 1
-<<<<<<< HEAD
+
                         this.reliability.put(state,Counties_Count);
-=======
-                        this.reliability.put(state,Counties);
->>>>>>> 16f20af5956bd8b988c02213d26d394bf58bcde2
+                        //this.reliability.put(state,Counties);
                     }
                     else {
 
@@ -100,33 +98,23 @@ public class MapData{
                             county_info.put(county, coordinates);
                             
                             //Initialize county count to 1
-<<<<<<< HEAD
                             county_count.put(county, 1);
-                            
-=======
-                            county_count.put(county,1);
                             this.reliability.put(state,county_count);
->>>>>>> 16f20af5956bd8b988c02213d26d394bf58bcde2
                         }
                         else{
                             
                             //Get the current count from the 'reliability' HashMap
-<<<<<<< HEAD
-                        	int current_count = (Integer)reliability.get(state).get(county);
-=======
+
+                        	//int current_count = (Integer)reliability.get(state).get(county);
+
                             int current_count = reliability.get(state).get(county);
->>>>>>> 16f20af5956bd8b988c02213d26d394bf58bcde2
+                            
                             current_count++; //increment current count by 1
                             
                             //Now update count
                             county_count.remove(county);
                             county_count.put(county,current_count);
-                            
-<<<<<<< HEAD
-                            
-=======
                             this.reliability.put(state,county_count);
->>>>>>> 16f20af5956bd8b988c02213d26d394bf58bcde2
 
                             //Get the existing coordinates from the hashmap
                             ArrayList existing_coordinates;
@@ -237,8 +225,8 @@ public class MapData{
         oos.close();
     }
     
-    public int getCount(String state, String county){
-    	return this.reliability.get(state).get(county);
+    public static int getCount(String state, String county){
+    	return reliability.get(state).get(county);
     }
     
 }
